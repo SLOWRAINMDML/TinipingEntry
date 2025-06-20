@@ -100,6 +100,10 @@
             <img id="result-image" src="" alt="Result Image" class="mx-auto rounded-2xl w-48 h-48 my-4 border-4 border-violet-300 shadow-lg object-cover">
             <h3 id="result-personality-title" class="text-xl font-bold text-gray-800 mb-2"></h3>
             <p id="result-description" class="bg-violet-50 rounded-lg p-4 text-gray-700 mb-6"></p>
+            <!-- URL을 이미지에 포함 -->
+            <div class="mt-4 pt-4 border-t border-gray-200">
+                <p class="text-xs text-gray-500 font-mono" id="share-url"></p>
+            </div>
             </div>
 
             <p style="padding-bottom: 10px;"></p>
@@ -555,6 +559,10 @@
             resultName.textContent = result.name;
             resultPersonalityTitle.textContent = t.resultPersonalityTitle;
             resultDescription.textContent = result.description;
+            
+            // URL을 이미지에 포함하기 위해 표시
+            const shareUrl = document.getElementById('share-url');
+            shareUrl.textContent = window.location.href;
             
             // Remove any existing emoji display
             const existingEmoji = document.getElementById('result-emoji');
