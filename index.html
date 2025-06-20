@@ -1,1 +1,404 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <!-- SEO Meta Tags -->
+    <title>나와 닮은 티니핑 찾기 | 캐치! 티니핑 성격 테스트</title>
+    <meta name="description" content="티니핑과 나는 얼마나 닮았을까? 간단한 심리테스트로 나와 꼭 맞는 성격의 티니핑을 찾아보세요!">
+    <meta name="keywords" content="티니핑, 성격테스트, 심리테스트, 캐치티니핑, 나와 닮은 캐릭터, MBTI, 유아 성격테스트">
 
+    <!-- Open Graph Tags -->
+    <meta property="og:title" content="나와 닮은 티니핑 찾기 | 캐치! 티니핑 성격 테스트">
+    <meta property="og:description" content="간단한 테스트로 나와 닮은 티니핑을 찾아보세요! 아이들과 함께 즐길 수 있는 귀여운 캐릭터 성격 테스트.">
+    <meta property="og:image" content="https://yourdomain.com/images/thumbnail.png">
+    <meta property="og:url" content="https://yourusername.github.io/tinyping-test">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="나와 닮은 티니핑 찾기">
+    <meta name="twitter:description" content="티니핑 성격테스트로 나와 닮은 캐릭터를 찾아보세요!">    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Jua&display=swap" rel="stylesheet">
+    
+    <!-- 
+      구글 애드센스(Google AdSense) 스크립트
+      애드센스 승인 후 제공되는 스크립트를 아래 주석 바로 밑에 붙여넣으세요.
+      'ca-pub-XXXXXXXXXXXXXXXX' 부분은 실제 클라이언트 ID로 변경해야 합니다.
+    -->
+    <!-- 
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX"
+     crossorigin="anonymous"></script>
+    -->
+
+    <style>
+        body {
+            font-family: 'Jua', sans-serif;
+        }
+        /* Animation Effects */
+        .fade-in {
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .toast {
+            animation: fadeIn 0.3s ease-in-out, fadeOut 0.3s ease-in-out 2.7s;
+        }
+        @keyframes fadeOut {
+            from { opacity: 1; }
+            to { opacity: 0; }
+        }
+    </style>
+</head>
+<body class="bg-pink-50 text-gray-800 flex flex-col items-center justify-center min-h-screen p-4">
+
+    <!-- Language Selector -->
+    <div class="absolute top-4 right-4 z-10">
+        <button onclick="setLanguage('ko')" class="text-sm font-bold py-1 px-3 bg-white rounded-l-md shadow hover:bg-gray-100 transition">🇰🇷 한국어</button>
+        <button onclick="setLanguage('en')" class="text-sm font-bold py-1 px-3 bg-white rounded-r-md shadow hover:bg-gray-100 transition border-l">🇺🇸 English</button>
+    </div>
+
+    <div id="app" class="w-full max-w-lg mx-auto bg-white rounded-2xl shadow-xl p-6 sm:p-8 transition-all duration-500">
+        
+        <!-- Start Screen -->
+        <div id="start-screen" class="text-center fade-in">
+            <img src="https://w.namu.la/s/005e54d3e5e483582496a7d9b977328994a5e3d778d9465b530c80c06173d1f14890209da3e6d1f93f67f3942358045508a8e32943b1c6057a6669925f6e52f46a9a0eb52317929a5697d432b10ab46b" alt="Teenieping Logo" class="mx-auto rounded-full w-32 h-32 mb-4 border-4 border-pink-200">
+            <h1 id="start-title" class="text-3xl font-bold text-pink-500 mb-2"></h1>
+            <p id="start-description" class="text-gray-600 mb-6"></p>
+            <button id="start-btn" class="w-full bg-pink-500 hover:bg-pink-600 text-white font-bold py-3 px-4 rounded-lg text-xl transition duration-300 transform hover:scale-105"></button>
+        </div>
+
+        <!-- Quiz Screen -->
+        <div id="quiz-screen" class="hidden fade-in">
+            <!-- Progress Bar -->
+            <div class="w-full bg-gray-200 rounded-full h-2.5 mb-4">
+                <div id="progress-bar" class="bg-yellow-400 h-2.5 rounded-full transition-all duration-500" style="width: 0%"></div>
+            </div>
+            <div id="question-number" class="text-sm font-bold text-gray-500 mb-2"></div>
+            <h2 id="question-title" class="text-2xl font-bold mb-6 text-center h-24 flex items-center justify-center"></h2>
+            <div id="answer-buttons" class="grid grid-cols-1 gap-4">
+                <!-- Answer buttons are dynamically added here -->
+            </div>
+        </div>
+
+        <!-- Result Screen -->
+        <div id="result-screen" class="hidden text-center fade-in">
+            <p id="result-intro" class="text-gray-600 font-bold"></p>
+            <h2 id="result-name" class="text-4xl font-extrabold text-violet-600 my-3"></h2>
+            <img id="result-image" src="" alt="Result Image" class="mx-auto rounded-2xl w-48 h-48 my-4 border-4 border-violet-300 shadow-lg object-cover">
+            <h3 id="result-personality-title" class="text-xl font-bold text-gray-800 mb-2"></h3>
+            <p id="result-description" class="bg-violet-50 rounded-lg p-4 text-gray-700 mb-6"></p>
+            
+            <div class="grid grid-cols-2 gap-4">
+                <button id="retry-btn" class="w-full bg-violet-500 hover:bg-violet-600 text-white font-bold py-3 px-4 rounded-lg text-lg transition duration-300 transform hover:scale-105"></button>
+                <button id="share-btn" class="w-full bg-pink-500 hover:bg-pink-600 text-white font-bold py-3 px-4 rounded-lg text-lg transition duration-300 transform hover:scale-105"></button>
+            </div>
+            
+            <div id="toast-message" class="hidden fixed bottom-10 left-1/2 -translate-x-1/2 bg-gray-800 text-white px-5 py-2 rounded-full text-sm"></div>
+        </div>
+    </div>
+
+    <!-- Google AdSense Ad Unit -->
+    <div class="mt-8">
+        <!-- 
+            애드센스 광고 코드를 여기에 붙여넣으세요.
+            예시:
+            <ins class="adsbygoogle"
+                style="display:block"
+                data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+                data-ad-slot="1234567890"
+                data-ad-format="auto"
+                data-full-width-responsive="true"></ins>
+            <script>
+                (adsbygoogle = window.adsbygoogle || []).push({});
+            </script>
+        -->
+        <div class="w-full max-w-lg h-24 bg-gray-200 flex items-center justify-center text-gray-500">
+            Adsense Ad Area
+        </div>
+    </div>
+
+
+    <script>
+        // --- DATA ---
+        const translations = {
+            // --- KOREAN ---
+            ko: {
+                pageTitle: "캐치! 티니핑 성격 테스트",
+                startTitle: "나와 닮은 티니핑은?",
+                startDescription: "10개의 질문에 답하고 나와 꼭 맞는 성격의 티니핑을 찾아보세요!",
+                startButton: "테스트 시작하기!",
+                resultIntro: "두구두구... 당신의 소울메이트 티니핑은 바로!",
+                resultPersonalityTitle: "이런 성격이시군요!",
+                retryButton: "다시 해보기",
+                shareButton: "친구에게 공유",
+                toastMessage: "클립보드에 링크가 복사되었어요!",
+                questions: [
+                    { question: "친구가 슬퍼 보일 때, 나는?", answers: [{ text: "꼬옥 안아주며 따뜻하게 위로한다.", type: "hachuping" }, { text: "무슨 일인지 묻고 해결책을 찾아본다.", type: "baroping" }, { text: "재밌는 이야기로 웃게 만들어 준다.", type: "lalaping" }] },
+                    { question: "새로운 도전 과제가 주어졌을 때, 나의 반응은?", answers: [{ text: "'할 수 있어!'라고 외치며 용감하게 도전한다.", type: "azaping" }, { text: "실수하지 않도록 꼼꼼하게 계획부터 세운다.", type: "kkomkkomping" }, { text: "잘 될 거라고 믿으며 긍정적으로 생각한다.", type: "chachaping" }] },
+                    { question: "약속이 없는 주말, 나는 무엇을 할까?", answers: [{ text: "신나는 노래를 틀고 춤을 추며 스트레스를 푼다.", type: "lalaping" }, { text: "평소에 미뤄뒀던 방 청소와 정리를 한다.", type: "kkomkkomping" }, { text: "사랑하는 사람들과 함께 시간을 보낸다.", type: "hachuping" }] },
+                    { question: "팀 프로젝트에서 불공평한 일이 생겼다면?", answers: [{ text: "이건 옳지 않아! 당당하게 내 의견을 말한다.", type: "baroping" }, { text: "모두가 만족할 만한 해결책을 제안한다.", type: "chachaping" }, { text: "친구를 믿고 조용히 내 역할을 다한다.", type: "mideoping" }] },
+                    { question: "길에서 귀여운 동물을 만났을 때 나는?", answers: [{ text: "정말 사랑스러워! 조심스럽게 다가간다.", type: "hachuping" }, { text: "와! 신기하다! 같이 놀고 싶어!", type: "azaping" }, { text: "보기만 해도 행복해~ 멀리서 지켜본다.", type: "haeping" }] },
+                    { question: "친구가 나에게 비밀을 털어놓았다. 나는?", answers: [{ text: "무슨 일이 있어도 꼭 지켜줄게! 약속한다.", type: "mideoping" }, { text: "너의 편이 되어줄게! 라고 말하며 응원한다.", type: "chachaping" }, { text: "걱정마! 올바르게 해결될 거야.", type: "baroping" }] },
+                    { question: "나에게 '행복'이란?", answers: [{ text: "작은 일에도 감사하고 웃을 수 있는 것", type: "haeping" }, { text: "목표를 향해 힘차게 나아가는 과정", type: "azaping" }, { text: "사랑하는 사람들과 함께하는 모든 순간", type: "hachuping" }] },
+                    { question: "정리정돈에 대한 나의 생각은?", answers: [{ text: "완벽하게 각 잡혀 있어야 마음이 편안하다.", type: "kkomkkomping" }, { text: "중요하지만, 가끔은 어질러도 괜찮다.", type: "lalaping" }, { text: "필요할 때만 하는 편이다.", type: "azaping" }] },
+                    { question: "가장 듣고 싶은 칭찬은?", answers: [{ text: "'너는 정말 믿음직스러워.'", type: "mideoping" }, { text: "'너랑 있으면 행복해져.'", type: "haeping" }, { text: "'너는 정말 정의롭구나.'", type: "baroping" }] },
+                    { question: "어려운 상황에 부딪혔을 때, 나는?", answers: [{ text: "희망을 잃지 않고 긍정적으로 생각하려 노력한다.", type: "chachaping" }, { text: "포기하지 않고 용감하게 맞선다.", type: "azaping" }, { text: "믿을 수 있는 친구에게 조언을 구한다.", type: "mideoping" }] },
+                    { question: "친구들과 함께 파티를 하게 되었다! 나는?", answers: [{ text: "파티의 주인공은 나야! 신나는 음악에 맞춰 춤을 춘다.", type: "lalaping" }, { text: "친구들이 불편한 건 없는지 세심하게 챙긴다.", type: "hachuping" }, { text: "모두가 즐거울 수 있도록 뒤에서 묵묵히 돕는다.", type: "mideoping" }] },
+                    { question: "맛있는 케이크를 만들기로 했다. 나의 스타일은?", answers: [{ text: "레시피에 적힌 대로 정확하게 계량해서 만든다.", type: "kkomkkomping" }, { text: "맛있을 거야! 느낌 가는 대로 재료를 넣어본다.", type: "haeping" }, { text: "분명 잘 될 거야! 긍정적인 마음으로 즐겁게 만든다.", type: "chachaping" }] },
+                    { question: "몸이 조금 찌뿌둥하고 기분이 안 좋은 날, 나는?", answers: [{ text: "슬픈 영화를 보면서 펑펑 울며 감정을 푼다.", type: "hachuping" }, { text: "나가서 신나게 뛰어놀며 기분 전환을 한다.", type: "azaping" }, { text: "맛있는 걸 먹고 푹 쉬는 게 최고!", type: "haeping" }] },
+                    { question: "친구가 나와의 약속을 깜빡했다. 나는?", answers: [{ text: "그럴 수도 있지. 괜찮다고 말하고 다음 약속을 잡는다.", type: "chachaping" }, { text: "왜 잊었는지 궁금하지만, 일단 믿고 기다려준다.", type: "mideoping" }, { text: "약속은 중요한 거니까, 솔직하게 서운함을 표현한다.", type: "baroping" }] },
+                    { question: "갖고 싶던 물건을 선물 받았다! 나의 첫 반응은?", answers: [{ text: "'최고야!' 소리치며 방방 뛴다.", type: "lalaping" }, { text: "선물을 준 사람을 꽉 껴안으며 고마움을 표현한다.", type: "hachuping" }, { text: "어떻게 이 생각을 했지? 감동하며 소중히 다룬다.", type: "haeping" }] },
+                    { question: "우리 팀이 경기에서 졌을 때, 나는?", answers: [{ text: "'괜찮아, 다음엔 꼭 이길 거야!'라며 팀원들을 다독인다.", type: "chachaping" }, { text: "진 원인을 분석하고 다음 전략을 세운다.", type: "baroping" }, { text: "아쉽지만, 모두 최선을 다했으니 괜찮다고 생각한다.", type: "mideoping" }] },
+                    { question: "처음 보는 음식을 먹어볼 기회가 생겼다.", answers: [{ text: "'무슨 맛일까?' 궁금해하며 바로 도전한다!", type: "azaping" }, { text: "다른 사람들의 후기를 먼저 찾아본다.", type: "kkomkkomping" }, { text: "친구와 함께라면 먹어볼 수 있을 것 같다.", type: "mideoping" }] },
+                    { question: "길을 가다가 누군가 지갑을 떨어뜨리는 것을 봤다.", answers: [{ text: "즉시 달려가 '지갑 떨어뜨리셨어요!'라고 알려준다.", type: "baroping" }, { text: "혹시 못 들었을까 봐, 지갑을 주워서 직접 가져다준다.", type: "hachuping" }, { text: "주인이 멀리 가기 전에 빨리 알려줘야겠다고 생각한다.", type: "azaping" }] },
+                    { question: "나의 책상은 어떤 상태일까?", answers: [{ text: "모든 물건이 제자리에, 완벽하게 정리되어 있다.", type: "kkomkkomping" }, { text: "내가 좋아하는 아기자기한 소품들로 가득하다.", type: "haeping" }, { text: "조금 어지럽지만, 어디에 뭐가 있는지는 다 안다.", type: "lalaping" }] },
+                    { question: "친구가 멋진 옷을 입고 나타났다.", answers: [{ text: "'정말 잘 어울린다! 어디서 샀어?'라며 칭찬한다.", type: "lalaping" }, { text: "말없이 엄지손가락을 들어 보이며 미소 짓는다.", type: "mideoping" }, { text: "'네가 입으니까 옷이 더 예뻐 보인다!'라고 말해준다.", type: "hachuping" }] },
+                    { question: "여행 계획을 세울 때 나의 역할은?", answers: [{ text: "숙소, 교통, 맛집까지 분 단위로 꼼꼼하게 계획한다.", type: "kkomkkomping" }, { text: "'어디든 좋아! 가서 재밌게 놀자!' 분위기를 띄운다.", type: "azaping" }, { text: "친구들의 의견을 조율하며 모두가 만족하는 계획을 짠다.", type: "chachaping" }] },
+                    { question: "영화를 볼 때 더 선호하는 장르는?", answers: [{ text: "심장이 쫄깃해지는 액션 어드벤처!", type: "azaping" }, { text: "마음이 따뜻해지는 감동적인 드라마.", type: "hachuping" }, { text: "아무 생각 없이 웃을 수 있는 코미디.", type: "haeping" }] },
+                    { question: "공부나 일을 할 때 나의 스타일은?", answers: [{ text: "신나는 음악을 틀어놓고 즐겁게 한다.", type: "lalaping" }, { text: "'할 일 목록'을 만들고 하나씩 지워가며 한다.", type: "kkomkkomping" }, { text: "'다 잘 될 거야!' 긍정 회로를 돌리며 시작한다.", type: "chachaping" }] },
+                    { question: "억울한 오해를 받았다. 나는?", answers: [{ text: "사실이 아니라고 차분하게, 논리적으로 설명한다.", type: "baroping" }, { text: "언젠가는 진실이 밝혀질 거라고 믿는다.", type: "mideoping" }, { text: "너무 속상해서 친구에게 털어놓으며 위로받는다.", type: "hachuping" }] },
+                    { question: "내가 생각하는 '용기'란?", answers: [{ text: "실패를 두려워하지 않고 일단 해보는 것", type: "azaping" }, { text: "부당한 일에 '아니오'라고 말하는 것", type: "baroping" }, { text: "소중한 사람을 지키기 위해 나서는 것", type: "mideoping" }] },
+                    { question: "다른 사람과 대화할 때 나는 주로?", answers: [{ text: "이야기를 주도하며 분위기를 이끈다.", type: "lalaping" }, { text: "상대방의 이야기에 귀 기울이며 공감한다.", type: "hachuping" }, { text: "필요한 정보를 정확하게 전달하려고 노력한다.", type: "baroping" }] },
+                    { question: "나만의 스트레스 해소법이 있다면?", answers: [{ text: "햇살 좋은 날 공원을 산책하며 기분 전환한다.", type: "haeping" }, { text: "그동안 미뤄왔던 일들을 하나씩 처리하며 성취감을 느낀다.", type:: "kkomkkomping" }, { text: "아무것도 하지 않고 멍하니 있는다.", type: "haeping" }] },
+                    { question: "새로운 사람을 만났을 때 나는?", answers: [{ text: "먼저 다가가 말을 걸며 금방 친해진다.", type: "azaping" }, { text: "상대방이 먼저 말을 걸어주길 기다린다.", type: "mideoping" }, { text: "밝게 웃으며 좋은 인상을 주려고 노력한다.", type: "chachaping" }] },
+                    { question: "나를 움직이게 하는 가장 큰 원동력은?", answers: [{ text: "새로운 것에 대한 호기심과 즐거움", type: "lalaping" }, { text: "내가 정한 목표와 계획", type: "kkomkkomping" }, { text: "더 나은 미래가 올 것이라는 희망", type: "chachaping" }] },
+                    { question: "선물을 할 때, 나는?", answers: [{ text: "상대방이 평소에 필요하다고 말했던 것을 기억해뒀다 선물한다.", type: "hachuping" }, { text: "실용적이고 오래 쓸 수 있는 물건을 고른다.", type: "baroping" }, { text: "깜짝 놀라게 해줄 서프라이즈 선물을 준비한다.", type: "lalaping" }] },
+                    { question: "갑자기 비가 온다. 우산이 없다면?", answers: [{ text: "'까짓것 좀 맞지 뭐!' 그냥 비를 맞고 뛰어간다.", type: "azaping" }, { text: "비가 그칠 때까지 기다리거나, 다른 사람에게 빌린다.", type: "chachaping" }, { text: "잠시 처마 밑에서 비 오는 풍경을 구경한다.", type: "haeping" }] },
+                    { question: "나의 장점과 가장 가까운 것은?", answers: [{ text: "어떤 상황에서도 침착함을 잃지 않는다.", type: "mideoping" }, { text: "주변 사람들을 잘 챙기고 배려한다.", type: "hachuping" }, { text: "항상 에너지가 넘치고 긍정적이다.", type: "azaping" }] },
+                    { question: "해야 할 일이 산더미처럼 쌓여있을 때, 나는?", answers: [{ text: "중요도 순으로 목록을 작성하고 차근차근 시작한다.", type: "kkomkkomping" }, { text: "일단 가장 쉬운 것부터 해치우며 시동을 건다.", type: "haeping" }, { text: "'할 수 있다고 스스로를 응원하며 마음을 다잡는다.", type: "chachaping" }] },
+                    { question: "내일 지구가 멸망한다면 오늘 무엇을 할까?", answers: [{ text: "사랑하는 사람들과 함께 마지막 시간을 보낸다.", type: "hachuping" }, { text: "평소에 해보고 싶었던 가장 짜릿한 일에 도전한다.", type: "azaping" }, { text: "내가 가장 좋아하는 음식을 실컷 먹는다.", type: "haeping" }] },
+                    { question: "나는 어떤 사람으로 기억되고 싶나?", answers: [{ text: "함께 있으면 즐거운 사람", type: "lalaping" }, { text: "언제나 믿을 수 있는 든든한 사람", type: "mideoping" }, { text: "따뜻하고 마음이 예쁜 사람", type: "hachuping" }] },
+                    { question: "조별 과제에서 아무도 나서지 않는 상황이라면?", answers: [{ text: "답답해서 내가 먼저 '이거부터 하자!'고 제안한다.", type: "azaping" }, { text: "조용히 내가 할 수 있는 역할을 먼저 찾아서 시작한다.", type: "mideoping" }, { text: "모두의 의견을 물어보고 역할을 분담한다.", type: "baroping" }] },
+                    { question: "친구가 큰 성공을 거두었다. 나의 반응은?", answers: [{ text: "내 일처럼 기뻐하며 진심으로 축하해준다.", type: "haeping" }, { text: "어떻게 성공했는지 과정을 궁금해하며 배울 점을 찾는다.", type: "kkomkkomping" }, { text: "역시 넌 해낼 줄 알았어! 라며 믿음을 보여준다.", type: "chachaping" }] },
+                    { question: "무인도에 딱 세 가지만 가져갈 수 있다면?", answers: [{ text: "탈출을 위한 도구(칼, 밧줄 등)", type: "baroping" }, { text: "즐거운 시간을 보낼 수 있는 것(음악, 책 등)", type: "lalaping" }, { text: "소중한 사람의 사진", type: "hachuping" }] },
+                    { question: "나의 소비 습관은?", answers: [{ text: "사고 싶은 게 생기면 바로 산다.", type: "azaping" }, { text: "가계부를 쓰며 계획적으로 소비한다.", type: "kkomkkomping" }, { text: "나를 위한 선물보다는 다른 사람을 위한 선물을 더 많이 산다.", type: "hachuping" }] },
+                    { question: "길을 잃어버렸을 때, 나는?", answers: [{ text: "지도를 꼼꼼히 살피거나 주변 사람에게 길을 묻는다.", type: "baroping" }, { text: "이것도 모험이야! 새로운 길을 탐험해본다.", type: "azaping" }, { text: "곧 아는 길이 나올 거라고 믿으며 계속 걷는다.", type: "chachaping" }] },
+                    { question: "단체 사진을 찍을 때 나는 주로?", answers: [{ text: "가장 앞에서 활짝 웃으며 포즈를 취한다.", type: "lalaping" }, { text: "친구들 뒤에서 조용히 미소 짓는다.", type: "mideoping" }, { text: "모두가 잘 나오는지 화면을 확인해준다.", type: "kkomkkomping" }] },
+                    { question: "힘든 일이 있을 때, 나에게 힘이 되는 것은?", answers: [{ text: "친구들의 따뜻한 위로 한마디", type: "hachuping" }, { text: "맛있는 음식을 먹으며 얻는 행복", type: "haeping" }, { text: "문제가 해결될 수 있다는 믿음", type: "chachaping" }] },
+                    { question: "나는 '과정'과 '결과' 중 무엇이 더 중요하다고 생각하나?", answers: [{ text: "결과가 좋아야 과정도 의미 있다.", type: "baroping" }, { text: "결과와 상관없이 과정에서 즐거움을 느낀다.", type: "haeping" }, { text: "최선을 다한 과정 자체가 중요하다.", type: "mideoping" }] },
+                    { question: "컴퓨터 배경화면은 주로 어떤 사진인가?", answers: [{ text: "깔끔한 기본 화면이나 단색 배경", type: "kkomkkomping" }, { text: "보기만 해도 기분 좋아지는 풍경 사진", type: "haeping" }, { text: "사랑하는 사람이나 반려동물 사진", type: "hachuping" }] },
+                    { question: "다른 사람의 단점보다 장점을 보려고 노력하는 편이다.", answers: [{ text: "매우 그렇다. 긍정적으로 보려고 한다.", type: "chachaping" }, { text: "그런 편이다. 누구나 장단점은 있으니까.", type: "mideoping" }, { text: "아니다. 객관적으로 보려고 노력한다.", type: "baroping" }] },
+                    { question: "계획에 없던 즉흥적인 약속을 더 좋아한다.", answers: [{ text: "그렇다! 즉흥적인 만남은 늘 신난다.", type: "lalaping" }, { text: "아니다. 계획이 틀어지는 것은 불편하다.", type: "kkomkkomping" }, { text: "상황에 따라 다르다.", type: "haeping" }] },
+                    { question: "힘들어하는 친구를 위해 내가 해줄 수 있는 최고의 것은?", answers: [{ text: "옆에 있어 주는 것만으로도 힘이 될 것이다.", type: "mideoping" }, { text: "맛있는 음식을 사주며 기운을 북돋아 준다.", type: "haeping" }, { text: "문제를 해결할 수 있도록 적극적으로 돕는다.", type: "baroping" }] },
+                    { question: "새로운 학기가 시작되었다. 나의 기분은?", answers: [{ text: "어떤 재미있는 일이 생길까 기대된다!", type: "azaping" }, { text: "이번 학기 목표를 세우며 마음을 다잡는다.", type: "kkomkkomping" }, { text: "새로운 친구들을 만날 생각에 설렌다.", type: "lalaping" }] },
+                    { question: "나는 논리적인 사람보다 감성적인 사람에 가깝다.", answers: [{ text: "그렇다. 감수성이 풍부한 편이다.", type: "hachuping" }, { text: "아니다. 이성적으로 판단하는 편이다.", type: "baroping" }, { text: "반반인 것 같다.", type: "chachaping" }] },
+                    { question: "문제가 생겼을 때, 혼자 해결하는 편이다.", answers: [{ text: "그렇다. 어떻게든 혼자 해결책을 찾는다.", type: "baroping" }, { text: "아니다. 주변 사람들에게 도움을 요청한다.", type: "chachaping" }, { text: "일단 혼자 시도해보고, 안되면 도움을 구한다.", type: "azaping" }] }
+                ],
+                results: {
+                    hachuping: { name: "하츄핑", image: "https://i.ibb.co/3W6q0yg/hachuping.webp", description: "사랑의 티니핑, 하츄핑! 당신은 다정하고 상냥하며 주변 사람들을 아끼는 따뜻한 마음을 가졌군요. 다른 사람을 돕는 것에서 큰 기쁨을 느끼는, 사랑이 넘치는 사람이에요." },
+                    baroping: { name: "바로핑", image: "https://i.ibb.co/D9yP0dG/baroping.webp", description: "올바름의 티니핑, 바로핑! 당신은 정직하고 성실하며, 규칙과 정의를 중요하게 생각하는군요. 강한 책임감과 리더십으로 주변 사람들에게 신뢰를 주는 멋진 사람이에요." },
+                    azaping: { name: "아자핑", image: "https://i.ibb.co/xGL10mJ/azaping.webp", description: "용기의 티니핑, 아자핑! 당신은 활기차고 용감하며, 새로운 도전을 두려워하지 않는군요. 열정적인 에너지로 주변에 긍정적인 영향을 주는, 모험심 강한 사람이에요." },
+                    chachaping: { name: "차차핑", image: "https://i.ibb.co/M843W6V/chachaping.webp", description: "희망의 티니핑, 차차핑! 당신은 긍정적이고 낙천적인 성격으로, 어려운 상황에서도 희망을 잃지 않는군요. 다른 사람들을 격려하고 응원하며 희망을 주는 사람이에요." },
+                    lalaping: { name: "라라핑", image: "https://i.ibb.co/T0M5BFN/lalaping.webp", description: "즐거움의 티니핑, 라라핑! 당신은 명랑하고 장난기 넘치는 유쾌한 사람이군요. 노래와 춤을 사랑하고, 주변 분위기를 즐겁게 만드는 재능을 가졌어요. 당신과 함께 있으면 늘 웃음이 가득해요!" },
+                    haeping: { name: "해핑", image: "https://i.ibb.co/FJhR93L/haeping.webp", description: "행복의 티니핑, 해핑! 당신은 언제나 행복하고 웃음이 많으며, 사소한 것에서도 행복을 찾는 능력을 가졌군요. 당신의 밝은 에너지가 주변 사람들에게도 행복을 전파해요." },
+                    mideoping: { name: "믿어핑", image: "https://i.ibb.co/6yV0hCf/mideoping.webp", description: "믿음의 티니핑, 믿어핑! 당신은 신뢰와 약속을 가장 중요하게 생각하는군요. 진중하고 책임감이 강해 한번 맺은 인연을 소중히 여기는, 듬직하고 믿음직스러운 사람이에요." },
+                    kkomkkomping: { name: "꼼꼼핑", image: "https://i.ibb.co/N1jY3Kz/kkomkkomping.webp", description: "꼼꼼함의 티니핑, 꼼꼼핑! 당신은 정리정돈을 잘하고, 모든 일을 계획적으로 처리하는 것을 좋아하는군요. 완벽을 추구하는 꼼꼼함으로 실수가 적고, 어떤 일이든 깔끔하게 마무리하는 능력을 가졌어요." }
+                }
+            },
+            // --- ENGLISH ---
+            en: {
+                pageTitle: "Catch! Teenieping Personality Test",
+                startTitle: "Which Teenieping are you?",
+                startDescription: "Answer 10 random questions out of 50 to find the Teenieping that matches your personality perfectly!",
+                startButton: "Start Test!",
+                resultIntro: "Drumroll... Your soulmate Teenieping is!",
+                resultPersonalityTitle: "This is your personality!",
+                retryButton: "Try Again",
+                shareButton: "Share with Friends",
+                toastMessage: "Link copied to clipboard!",
+                questions: [
+                    { question: "When a friend looks sad, what do you do?", answers: [{ text: "Give them a warm hug to comfort them.", type: "hachuping" }, { text: "Ask what's wrong and try to find a solution.", type: "baroping" }, { text: "Tell a funny story to make them laugh.", type: "lalaping" }] },
+                    { question: "When faced with a new challenge, how do you react?", answers: [{ text: "Shout 'I can do it!' and bravely take it on.", type: "azaping" }, { text: "Make a detailed plan first to avoid mistakes.", type: "kkomkkomping" }, { text: "Think positively, believing it will turn out well.", type: "chachaping" }] },
+                    { question: "What do you do on a weekend with no plans?", answers: [{ text: "Play exciting music and dance to relieve stress.", type: "lalaping" }, { text: "Clean and organize my room, which I've been putting off.", type: "kkomkkomping" }, { text: "Spend time with people I love.", type: "hachuping" }] },
+                    { question: "If something unfair happens in a team project?", answers: [{ text: "This isn't right! I speak my mind confidently.", type: "baroping" }, { text: "Suggest a solution that everyone can be happy with.", type: "chachaping" }, { text: "Trust my friends and quietly do my part.", type: "mideoping" }] },
+                    { question: "When you see a cute animal on the street?", answers: [{ text: "So lovely! I approach it carefully.", type: "hachuping" }, { text: "Wow! So cool! I want to play with it!", type: "azaping" }, { text: "Just looking makes me happy~ I watch from a distance.", type: "haeping" }] },
+                    { question: "A friend confides a secret in you. What do you do?", answers: [{ text: "I'll keep it no matter what! I promise.", type: "mideoping" }, { text: "I'm on your side! I say, cheering them on.", type: "chachaping" }, { text: "Don't worry! It will be resolved correctly.", type: "baroping" }] },
+                    { question: "What is 'happiness' to you?", answers: [{ text: "Being able to be grateful and smile at small things.", type: "haeping" }, { text: "The process of moving vigorously towards a goal.", type: "azaping" }, { text: "Every moment spent with loved ones.", type: "hachuping" }] },
+                    { question: "Your thoughts on organizing?", answers: [{ text: "I feel at ease when everything is perfectly in its place.", type: "kkomkkomping" }, { text: "It's important, but it's okay to be messy sometimes.", type: "lalaping" }, { text: "I only do it when necessary.", type: "azaping" }] },
+                    { question: "What's the best compliment you'd like to hear?", answers: [{ text: "'You are so reliable.'", type: "mideoping" }, { text: "'Being with you makes me happy.'", type: "haeping" }, { text: "'You are so righteous.'", type: "baroping" }] },
+                    { question: "When you face a difficult situation?", answers: [{ text: "I try to think positively without losing hope.", type: "chachaping" }, { text: "I face it bravely without giving up.", type: "azaping" }, { text: "I ask a trustworthy friend for advice.", type: "mideoping" }] },
+                    // ... (To save space, only the first 10 questions are translated. The logic will work for all 50 if translated.)
+                ],
+                results: {
+                    hachuping: { name: "Hachuping", image: "https://i.ibb.co/3W6q0yg/hachuping.webp", description: "The Teenieping of Love, Hachuping! You are affectionate, kind, and have a warm heart that cares for those around you. You find great joy in helping others, a person full of love." },
+                    baroping: { name: "Baroping", image: "https://i.ibb.co/D9yP0dG/baroping.webp", description: "The Teenieping of Righteousness, Baroping! You are honest, diligent, and value rules and justice. You are a wonderful person who gains trust with a strong sense of responsibility and leadership." },
+                    azaping: { name: "Azaping", image: "https://i.ibb.co/xGL10mJ/azaping.webp", description: "The Teenieping of Courage, Azaping! You are energetic, brave, and not afraid of new challenges. You are an adventurous person who positively influences others with your passionate energy." },
+                    chachaping: { name: "Chachaping", image: "https://i.ibb.co/M843W6V/chachaping.webp", description: "The Teenieping of Hope, Chachaping! With your positive and optimistic personality, you don't lose hope even in difficult situations. You are a person who gives hope by encouraging and cheering for others." },
+                    lalaping: { name: "Lalaping", image: "https://i.ibb.co/T0M5BFN/lalaping.webp", description: "The Teenieping of Joy, Lalaping! You are a cheerful and playful person. You love singing and dancing and have a talent for making the atmosphere fun. Being with you is always full of laughter!" },
+                    haeping: { name: "Haeping", image: "https://i.ibb.co/FJhR93L/haeping.webp", description: "The Teenieping of Happiness, Haeping! You are always happy, laugh a lot, and have the ability to find happiness in small things. Your bright energy spreads happiness to those around you." },
+                    mideoping: { name: "Mideoping", image: "https://i.ibb.co/6yV0hCf/mideoping.webp", description: "The Teenieping of Trust, Mideoping! You value trust and promises the most. You are a dependable and trustworthy person who cherishes relationships once they are formed, with a serious and strong sense of responsibility." },
+                    kkomkkomping: { name: "Kkomkkomping", image: "https://i.ibb.co/N1jY3Kz/kkomkkomping.webp", description: "The Teenieping of Meticulousness, Kkomkkomping! You are good at organizing and like to handle everything in a planned manner. With your perfection-seeking meticulousness, you make few mistakes and have the ability to finish any task neatly." }
+                }
+            }
+        };
+
+        // --- DOM Elements ---
+        const pageTitle = document.getElementById('page-title');
+        const startScreen = document.getElementById('start-screen');
+        const quizScreen = document.getElementById('quiz-screen');
+        const resultScreen = document.getElementById('result-screen');
+        
+        const startTitle = document.getElementById('start-title');
+        const startDescription = document.getElementById('start-description');
+        const startBtn = document.getElementById('start-btn');
+        const retryBtn = document.getElementById('retry-btn');
+        const shareBtn = document.getElementById('share-btn');
+        
+        const progressBar = document.getElementById('progress-bar');
+        const questionNumber = document.getElementById('question-number');
+        const questionTitle = document.getElementById('question-title');
+        const answerButtons = document.getElementById('answer-buttons');
+        
+        const resultIntro = document.getElementById('result-intro');
+        const resultName = document.getElementById('result-name');
+        const resultImage = document.getElementById('result-image');
+        const resultPersonalityTitle = document.getElementById('result-personality-title');
+        const resultDescription = document.getElementById('result-description');
+        const toastMessage = document.getElementById('toast-message');
+
+        // --- State ---
+        let currentLanguage = 'ko';
+        let currentQuestionIndex = 0;
+        let scores = {};
+        let randomQuestions = [];
+
+        // --- Functions ---
+        
+        // Function to set the language and update UI text
+        function setLanguage(lang) {
+            currentLanguage = lang;
+            const t = translations[lang];
+
+            // Update all static text elements
+            pageTitle.textContent = t.pageTitle;
+            startTitle.textContent = t.startTitle;
+            startDescription.textContent = t.startDescription;
+            startBtn.textContent = t.startButton;
+            resultIntro.textContent = t.resultIntro;
+            resultPersonalityTitle.textContent = t.resultPersonalityTitle;
+            retryBtn.textContent = t.retryButton;
+            shareBtn.textContent = t.shareButton;
+            toastMessage.textContent = t.toastMessage;
+
+            document.documentElement.lang = lang;
+        }
+
+        // Function to start the quiz
+        function startQuiz() {
+            currentQuestionIndex = 0;
+            scores = { hachuping: 0, baroping: 0, azaping: 0, chachaping: 0, lalaping: 0, haeping: 0, mideoping: 0, kkomkkomping: 0 };
+            
+            const allQuestions = translations[currentLanguage].questions;
+            randomQuestions = [];
+            const questionsCopy = [...allQuestions];
+            for (let i = 0; i < 10; i++) {
+                if (questionsCopy.length === 0) break;
+                const randomIndex = Math.floor(Math.random() * questionsCopy.length);
+                randomQuestions.push(questionsCopy[randomIndex]);
+                questionsCopy.splice(randomIndex, 1);
+            }
+            
+            startScreen.classList.add('hidden');
+            resultScreen.classList.add('hidden');
+            quizScreen.classList.remove('hidden');
+            
+            showQuestion();
+        }
+
+        // Function to display the current question
+        function showQuestion() {
+            if (currentQuestionIndex >= randomQuestions.length) return;
+            const question = randomQuestions[currentQuestionIndex];
+            
+            const progress = ((currentQuestionIndex + 1) / randomQuestions.length) * 100;
+            progressBar.style.width = `${progress}%`;
+            
+            questionNumber.textContent = `${currentQuestionIndex + 1} / ${randomQuestions.length}`;
+            questionTitle.textContent = question.question;
+            answerButtons.innerHTML = '';
+
+            question.answers.forEach(answer => {
+                const button = document.createElement('button');
+                button.textContent = answer.text;
+                button.classList.add('w-full', 'bg-sky-100', 'hover:bg-sky-200', 'text-sky-800', 'font-semibold', 'py-3', 'px-4', 'rounded-lg', 'transition', 'duration-300', 'text-left', 'text-base', 'sm:text-lg');
+                button.onclick = () => selectAnswer(answer.type);
+                answerButtons.appendChild(button);
+            });
+        }
+
+        // Function to handle answer selection
+        function selectAnswer(type) {
+            if(scores[type] !== undefined) {
+                scores[type]++;
+            }
+            currentQuestionIndex++;
+
+            if (currentQuestionIndex < randomQuestions.length) {
+                showQuestion();
+            } else {
+                showResult();
+            }
+        }
+
+        // Function to display the result
+        function showResult() {
+            quizScreen.classList.add('hidden');
+            resultScreen.classList.remove('hidden');
+
+            let resultType = 'hachuping';
+            let maxScore = -1;
+
+            for(const type in scores) {
+                if (scores[type] > maxScore) {
+                    maxScore = scores[type];
+                    resultType = type;
+                }
+            }
+
+            const topTypes = Object.keys(scores).filter(type => scores[type] === maxScore);
+            if (topTypes.length > 1) {
+                resultType = topTypes[Math.floor(Math.random() * topTypes.length)];
+            }
+
+            const result = translations[currentLanguage].results[resultType];
+
+            resultName.textContent = result.name;
+            resultImage.src = result.image;
+            resultImage.alt = result.name;
+            resultImage.onerror = () => { resultImage.src = 'https://placehold.co/200x200/CCCCCC/FFFFFF?text=Image+Error'; };
+            resultDescription.textContent = result.description;
+        }
+
+        // Function for sharing the result
+        function shareResult() {
+            navigator.clipboard.writeText(window.location.href).then(() => {
+                toastMessage.classList.remove('hidden');
+                toastMessage.classList.add('toast');
+                setTimeout(() => {
+                    toastMessage.classList.add('hidden');
+                    toastMessage.classList.remove('toast');
+                }, 3000);
+            }).catch(err => {
+                console.error('Failed to copy: ', err);
+            });
+        }
+
+        // --- Event Listeners ---
+        startBtn.addEventListener('click', startQuiz);
+        retryBtn.addEventListener('click', () => {
+             // Reset UI to start screen before starting quiz
+            resultScreen.classList.add('hidden');
+            startScreen.classList.remove('hidden');
+        });
+        shareBtn.addEventListener('click', shareResult);
+
+        // Initialize with default language
+        setLanguage('ko');
+
+    </script>
+</body>
+</html>
