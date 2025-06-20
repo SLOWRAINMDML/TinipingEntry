@@ -42,17 +42,26 @@
 </head>
 <body class="bg-pink-50 text-gray-800 flex flex-col items-center justify-center min-h-screen p-4">
 
+    <!-- Visitor Counter -->
+    <div class="absolute top-4 left-4 z-10 bg-white rounded-md shadow px-3 py-1">
+        <span class="text-sm font-bold text-gray-700">Visits: <span id="visit-counter">0</span></span>
+    </div>
+
     <!-- Language Selector -->
     <div class="absolute top-4 right-4 z-10">
-        <button onclick="setLanguage('ko')" class="text-sm font-bold py-1 px-3 bg-white rounded-l-md shadow hover:bg-gray-100 transition">🇰🇷 한국어</button>
-        <button onclick="setLanguage('en')" class="text-sm font-bold py-1 px-3 bg-white rounded-r-md shadow hover:bg-gray-100 transition border-l">🇺🇸 English</button>
+        <button onclick="setLanguage('ko')" class="text-xs font-bold py-1 px-2 bg-white shadow hover:bg-gray-100 transition border-r">🇰🇷</button>
+        <button onclick="setLanguage('en')" class="text-xs font-bold py-1 px-2 bg-white shadow hover:bg-gray-100 transition border-r">🇺🇸</button>
+        <button onclick="setLanguage('ja')" class="text-xs font-bold py-1 px-2 bg-white shadow hover:bg-gray-100 transition border-r">🇯🇵</button>
+        <button onclick="setLanguage('zh')" class="text-xs font-bold py-1 px-2 bg-white shadow hover:bg-gray-100 transition border-r">🇨🇳</button>
+        <button onclick="setLanguage('id')" class="text-xs font-bold py-1 px-2 bg-white shadow hover:bg-gray-100 transition border-r">🇮🇩</button>
+        <button onclick="setLanguage('fr')" class="text-xs font-bold py-1 px-2 bg-white rounded-r-md shadow hover:bg-gray-100 transition">🇫🇷</button>
     </div>
 
     <div id="app" class="w-full max-w-lg mx-auto bg-white rounded-2xl shadow-xl p-6 sm:p-8 transition-all duration-500">
         
         <!-- Start Screen -->
         <div id="start-screen" class="text-center fade-in">
-            <img src="https://w.namu.la/s/005e54d3e5e483582496a7d9b977328994a5e3d778d9465b530c80c06173d1f14890209da3e6d1f93f67f3942358045508a8e32943b1c6057a6669925f6e52f46a9a0eb52317929a5697d432b10ab46b" alt="Teenieping Logo" class="mx-auto rounded-full w-32 h-32 mb-4 border-4 border-pink-200">
+            <img src="https://i.namu.wiki/i/qNcYmrLy4EuXaWGixqCZFAthTcPLQWWY0ltN7PYMgxCAwXEH8xP3qmp73QnNqj9FWn_AQNwSyYERCtLA32sDh9uGoSCZIguIR5k0O-pgNZGD6FqWLBlOs5J-EmvowVP1CmyVfKRnXg4bgo-h7AKWig.webp" alt="Teenieping Logo" class="mx-auto rounded-full w-32 h-32 mb-4 border-4 border-pink-200">
             <h1 id="start-title" class="text-3xl font-bold text-pink-500 mb-2"></h1>
             <p id="start-description" class="text-gray-600 mb-6"></p>
             <button id="start-btn" class="w-full bg-pink-500 hover:bg-pink-600 text-white font-bold py-3 px-4 rounded-lg text-xl transition duration-300 transform hover:scale-105"></button>
@@ -110,6 +119,17 @@
 
 
     <script>
+        // --- VISITOR COUNTER ---
+        function updateVisitorCounter() {
+            let visits = localStorage.getItem('teenieping-visits') || 0;
+            visits = parseInt(visits) + 1;
+            localStorage.setItem('teenieping-visits', visits);
+            document.getElementById('visit-counter').textContent = visits.toLocaleString();
+        }
+
+        // Call on page load
+        updateVisitorCounter();
+
         // --- DATA ---
         const translations = {
             // --- KOREAN ---
@@ -176,14 +196,118 @@
                     { question: "문제가 생겼을 때, 혼자 해결하는 편이다.", answers: [{ text: "그렇다. 어떻게든 혼자 해결책을 찾는다.", type: "baroping" }, { text: "아니다. 주변 사람들에게 도움을 요청한다.", type: "chachaping" }, { text: "일단 혼자 시도해보고, 안되면 도움을 구한다.", type: "azaping" }] }
                 ],
                 results: {
-                    hachuping: { name: "하츄핑", image: "https://i.ibb.co/3W6q0yg/hachuping.webp", description: "사랑의 티니핑, 하츄핑! 당신은 다정하고 상냥하며 주변 사람들을 아끼는 따뜻한 마음을 가졌군요. 다른 사람을 돕는 것에서 큰 기쁨을 느끼는, 사랑이 넘치는 사람이에요." },
-                    baroping: { name: "바로핑", image: "https://i.ibb.co/D9yP0dG/baroping.webp", description: "올바름의 티니핑, 바로핑! 당신은 정직하고 성실하며, 규칙과 정의를 중요하게 생각하는군요. 강한 책임감과 리더십으로 주변 사람들에게 신뢰를 주는 멋진 사람이에요." },
-                    azaping: { name: "아자핑", image: "https://i.ibb.co/xGL10mJ/azaping.webp", description: "용기의 티니핑, 아자핑! 당신은 활기차고 용감하며, 새로운 도전을 두려워하지 않는군요. 열정적인 에너지로 주변에 긍정적인 영향을 주는, 모험심 강한 사람이에요." },
-                    chachaping: { name: "차차핑", image: "https://i.ibb.co/M843W6V/chachaping.webp", description: "희망의 티니핑, 차차핑! 당신은 긍정적이고 낙천적인 성격으로, 어려운 상황에서도 희망을 잃지 않는군요. 다른 사람들을 격려하고 응원하며 희망을 주는 사람이에요." },
-                    lalaping: { name: "라라핑", image: "https://i.ibb.co/T0M5BFN/lalaping.webp", description: "즐거움의 티니핑, 라라핑! 당신은 명랑하고 장난기 넘치는 유쾌한 사람이군요. 노래와 춤을 사랑하고, 주변 분위기를 즐겁게 만드는 재능을 가졌어요. 당신과 함께 있으면 늘 웃음이 가득해요!" },
-                    haeping: { name: "해핑", image: "https://i.ibb.co/FJhR93L/haeping.webp", description: "행복의 티니핑, 해핑! 당신은 언제나 행복하고 웃음이 많으며, 사소한 것에서도 행복을 찾는 능력을 가졌군요. 당신의 밝은 에너지가 주변 사람들에게도 행복을 전파해요." },
-                    mideoping: { name: "믿어핑", image: "https://i.ibb.co/6yV0hCf/mideoping.webp", description: "믿음의 티니핑, 믿어핑! 당신은 신뢰와 약속을 가장 중요하게 생각하는군요. 진중하고 책임감이 강해 한번 맺은 인연을 소중히 여기는, 듬직하고 믿음직스러운 사람이에요." },
-                    kkomkkomping: { name: "꼼꼼핑", image: "https://i.ibb.co/N1jY3Kz/kkomkkomping.webp", description: "꼼꼼함의 티니핑, 꼼꼼핑! 당신은 정리정돈을 잘하고, 모든 일을 계획적으로 처리하는 것을 좋아하는군요. 완벽을 추구하는 꼼꼼함으로 실수가 적고, 어떤 일이든 깔끔하게 마무리하는 능력을 가졌어요." }
+                    hachuping: { name: "하츄핑", image: "https://i.namu.wiki/i/VPczNmmnPMnJiDlGCIQnuYb8xcuwqGpxdPS7rLNv9QR_1E6aTE8cpBM_rJ2kT2GdmR7w_l3mq3hlHuOXSHW5ClNBhXoAQyPa1auuz3VAAzWZaS2oOPXhj-zJkcgTUR5PCrfzd_HOTzGdaGE7FEZ1Dw.webp", emoji: "💖", color: "#FF69B4", description: "사랑의 티니핑, 하츄핑! 당신은 다정하고 상냥하며 주변 사람들을 아끼는 따뜻한 마음을 가졌군요. 다른 사람을 돕는 것에서 큰 기쁨을 느끼는, 사랑이 넘치는 사람이에요." },
+                    baroping: { name: "바로핑", image: "https://i.namu.wiki/i/UMM58g85bjvXfRpU9yQwANDZtOw2UZX95rFcQfnGps5GL81z0hE5DqFhZQafqtljmv4Bx1656xJ0wTt0VCWEUAobsaqjL8W7-Sl3olK8CkFc2D03ej_YuxLwfbjrAXUW0xQXHLJV4KNCwXzqP4htCw.webp", emoji: "⚖️", color: "#4169E1", description: "올바름의 티니핑, 바로핑! 당신은 정직하고 성실하며, 규칙과 정의를 중요하게 생각하는군요. 강한 책임감과 리더십으로 주변 사람들에게 신뢰를 주는 멋진 사람이에요." },
+                    azaping: { name: "아자핑", image: "https://i.namu.wiki/i/VYmjWN32dpj6M_rUN6Qc8r3hwt2qQmqWOOozpFWqtUK7TJqK32rSm1i0cGxoIAiraXv3H_BTdvRytVaGPxVW59HYOhC15c87p1lOwSkmCpQndk6XngYwLegFAH6duUz7MLiH6y68pzPcE17Y-ZY1Cg.webp", emoji: "🔥", color: "#FFD700", description: "용기의 티니핑, 아자핑! 당신은 활기차고 용감하며, 새로운 도전을 두려워하지 않는군요. 열정적인 에너지로 주변에 긍정적인 영향을 주는, 모험심 강한 사람이에요." },
+                    chachaping: { name: "차차핑", image: "https://i.namu.wiki/i/GRkSfBmOji6dN7MWRwDAQQ-mKYarI5A0bw6r1PwbdpC-t-NUJmqedoyjhF4wCvalFEZh5MhjXeLyC3bnIv-1-ajArSGAHzKjmCAKoDSzeAuGW7A81iKFjM9UUAWhqwh5C6UHn91y05nF1pbiXrmjzw.webp", emoji: "🌈", color: "#32CD32", description: "희망의 티니핑, 차차핑! 당신은 긍정적이고 낙천적인 성격으로, 어려운 상황에서도 희망을 잃지 않는군요. 다른 사람들을 격려하고 응원하며 희망을 주는 사람이에요." },
+                    lalaping: { name: "라라핑", image: "https://i.namu.wiki/i/h7J75O8PqpRLFPzOuo-teD8u-YDdjsEHxsvC85ZNqwxnsBHS4E58Pc-lQaGyqv_2z1UhJpXlLDBMAhul3s4emXxSx8QAygZHF-NHcpPETva6JZMifz0PQ9pSRbzGnmVx8cEpV2i9IKAFcH9wPlVWIw.webp", emoji: "🎵", color: "#FF6347", description: "즐거움의 티니핑, 라라핑! 당신은 명랑하고 장난기 넘치는 유쾌한 사람이군요. 노래와 춤을 사랑하고, 주변 분위기를 즐겁게 만드는 재능을 가졌어요. 당신과 함께 있으면 늘 웃음이 가득해요!" },
+                    haeping: { name: "해핑", image: "https://i.namu.wiki/i/OQjm8CUMRq_mm1fLfXAeNGrxdDZ3b1_5PHq8rrrUSb0gv9GQ3zV7DZPmKS2l78H_uPeBuCapqT_1z_9HtyiTUocywv6LLVNq0ODugCYyRLDLA3NvT2FxOTrQvmjPs1ZNu2ijO0ew5J5BOQ65C26okQ.webp", emoji: "☀️", color: "#FFA500", description: "행복의 티니핑, 해핑! 당신은 언제나 행복하고 웃음이 많으며, 사소한 것에서도 행복을 찾는 능력을 가졌군요. 당신의 밝은 에너지가 주변 사람들에게도 행복을 전파해요." },
+                    mideoping: { name: "믿어핑", image: "https://i.namu.wiki/i/aOdxsEngYOPOZdYnQWneb5JKUeutA4NPcGTaxNJaUS6rDIcack-4x7re4lIFUieF_JCvbduHG-keqfoFLnSiEu4w8kGwXZvmBzY2ZaYdW5ahRkLYR68avQ2ybupgbuWliwy_eztP74tdCcst5YUVTw.webp", emoji: "🤝", color: "#8A2BE2", description: "믿음의 티니핑, 믿어핑! 당신은 신뢰와 약속을 가장 중요하게 생각하는군요. 진중하고 책임감이 강해 한번 맺은 인연을 소중히 여기는, 듬직하고 믿음직스러운 사람이에요." },
+                    kkomkkomping: { name: "메모핑", image: "https://i.namu.wiki/i/I0mQ2tYLr8kg9tpl7srGU9GJOiaE09Cex6QU7VMH9q7jepBhrkES1OikfgaiZw5tZ4uPbuTdXIDodqNe6UZldy5ifF9qSp40aE-vdivigTxLFjAzbIUl1sT32VPJafal22LVszdNk4MrRTo4Mk9aVg.webp", emoji: "📋", color: "#20B2AA", description: "기록의 티니핑, 메모핑! 당신은 정리정돈을 잘하고, 모든 일을 계획적으로 처리하는 것을 좋아하는군요. 완벽을 추구하는 꼼꼼함으로 실수가 적고, 어떤 일이든 깔끔하게 마무리하는 능력을 가졌어요." }
+                }
+            },
+            // --- JAPANESE ---
+            ja: {
+                pageTitle: "キャッチ！ティニーピング性格テスト",
+                startTitle: "あなたに似ているティニーピングは？",
+                startDescription: "50問の質問からランダムに出てくる10問に答えて、あなたにぴったりの性格のティニーピングを見つけてみましょう！",
+                startButton: "テストスタート！",
+                resultIntro: "どきどき...あなたのソウルメイト・ティニーピングは！",
+                resultPersonalityTitle: "こんな性格ですね！",
+                retryButton: "もう一度",
+                shareButton: "友達にシェア",
+                toastMessage: "リンクがクリップボードにコピーされました！",
+                questions: [
+                    { question: "友達が悲しそうに見える時、私は？", answers: [{ text: "ぎゅっと抱きしめて温かく慰める。", type: "hachuping" }, { text: "何があったか聞いて解決策を探してみる。", type: "baroping" }, { text: "楽しい話で笑わせてあげる。", type: "lalaping" }] },
+                    { question: "新しい挑戦課題が与えられた時、私の反応は？", answers: [{ text: "「できる！」と叫んで勇敢に挑戦する。", type: "azaping" }, { text: "失敗しないよう念入りに計画から立てる。", type: "kkomkkomping" }, { text: "うまくいくと信じて前向きに考える。", type: "chachaping" }] }
+                ],
+                results: {
+                    hachuping: { name: "ハチューピング", image: "https://i.namu.wiki/i/VPczNmmnPMnJiDlGCIQnuYb8xcuwqGpxdPS7rLNv9QR_1E6aTE8cpBM_rJ2kT2GdmR7w_l3mq3hlHuOXSHW5ClNBhXoAQyPa1auuz3VAAzWZaS2oOPXhj-zJkcgTUR5PCrfzd_HOTzGdaGE7FEZ1Dw.webp", emoji: "💖", color: "#FF69B4", description: "愛のティニーピング、ハチューピング！あなたは優しくて親切で、周りの人を大切にする温かい心を持っていますね。人を助けることに大きな喜びを感じる、愛にあふれた人です。" },
+                    baroping: { name: "バロピング", image: "https://i.namu.wiki/i/UMM58g85bjvXfRpU9yQwANDZtOw2UZX95rFcQfnGps5GL81z0hE5DqFhZQafqtljmv4Bx1656xJ0wTt0VCWEUAobsaqjL8W7-Sl3olK8CkFc2D03ej_YuxLwfbjrAXUW0xQXHLJV4KNCwXzqP4htCw.webp", emoji: "⚖️", color: "#4169E1", description: "正しさのティニーピング、バロピング！あなたは正直で誠実で、ルールと正義を大切に思っていますね。強い責任感とリーダーシップで周りの人に信頼を与える素敵な人です。" },
+                    azaping: { name: "アザピング", image: "https://i.namu.wiki/i/VYmjWN32dpj6M_rUN6Qc8r3hwt2qQmqWOOozpFWqtUK7TJqK32rSm1i0cGxoIAiraXv3H_BTdvRytVaGPxVW59HYOhC15c87p1lOwSkmCpQndk6XngYwLegFAH6duUz7MLiH6y68pzPcE17Y-ZY1Cg.webp", emoji: "🔥", color: "#FFD700", description: "勇気のティニーピング、アザピング！あなたは活気にあふれ勇敢で、新しい挑戦を恐れませんね。情熱的なエネルギーで周りに良い影響を与える、冒険心の強い人です。" },
+                    chachaping: { name: "チャチャピング", image: "https://i.namu.wiki/i/GRkSfBmOji6dN7MWRwDAQQ-mKYarI5A0bw6r1PwbdpC-t-NUJmqedoyjhF4wCvalFEZh5MhjXeLyC3bnIv-1-ajArSGAHzKjmCAKoDSzeAuGW7A81iKFjM9UUAWhqwh5C6UHn91y05nF1pbiXrmjzw.webp", emoji: "🌈", color: "#32CD32", description: "希望のティニーピング、チャチャピング！あなたは前向きで楽観的な性格で、困難な状況でも希望を失いませんね。他の人を励まし応援して希望を与える人です。" },
+                    lalaping: { name: "ララピング", image: "https://i.namu.wiki/i/h7J75O8PqpRLFPzOuo-teD8u-YDdjsEHxsvC85ZNqwxnsBHS4E58Pc-lQaGyqv_2z1UhJpXlLDBMAhul3s4emXxSx8QAygZHF-NHcpPETva6JZMifz0PQ9pSRbzGnmVx8cEpV2i9IKAFcH9wPlVWIw.webp", emoji: "🎵", color: "#FF6347", description: "楽しさのティニーピング、ララピング！あなたは明るくていたずら好きの愉快な人ですね。歌と踊りを愛し、周りの雰囲気を楽しくする才能があります。あなたと一緒にいるといつも笑いがいっぱいです！" },
+                    haeping: { name: "ハエピング", image: "https://i.namu.wiki/i/OQjm8CUMRq_mm1fLfXAeNGrxdDZ3b1_5PHq8rrrUSb0gv9GQ3zV7DZPmKS2l78H_uPeBuCapqT_1z_9HtyiTUocywv6LLVNq0ODugCYyRLDLA3NvT2FxOTrQvmjPs1ZNu2ijO0ew5J5BOQ65C26okQ.webp", emoji: "☀️", color: "#FFA500", description: "幸せのティニーピング、ハエピング！あなたはいつも幸せで笑顔が多く、小さなことからも幸せを見つける能力がありますね。あなたの明るいエネルギーが周りの人にも幸せを広げています。" },
+                    mideoping: { name: "ミデオピング", image: "https://i.namu.wiki/i/aOdxsEngYOPOZdYnQWneb5JKUeutA4NPcGTaxNJaUS6rDIcack-4x7re4lIFUieF_JCvbduHG-keqfoFLnSiEu4w8kGwXZvmBzY2ZaYdW5ahRkLYR68avQ2ybupgbuWliwy_eztP74tdCcst5YUVTw.webp", emoji: "🤝", color: "#8A2BE2", description: "信頼のティニーピング、ミデオピング！あなたは信頼と約束を最も大切に思っていますね。真面目で責任感が強く、一度結んだ縁を大切にする、頼もしく信頼できる人です。" },
+                    kkomkkomping: { name: "メモピング", image: "https://i.namu.wiki/i/I0mQ2tYLr8kg9tpl7srGU9GJOiaE09Cex6QU7VMH9q7jepBhrkES1OikfgaiZw5tZ4uPbuTdXIDodqNe6UZldy5ifF9qSp40aE-vdivigTxLFjAzbIUl1sT32VPJafal22LVszdNk4MrRTo4Mk9aVg.webp", emoji: "📋", color: "#20B2AA", description: "記録のティニーピング、メモピング！あなたは整理整頓が得意で、すべてのことを計画的に処理するのが好きですね。完璧を追求する几帳面さでミスが少なく、どんなことでもきれいに仕上げる能力があります。" }
+                }
+            },
+            // --- CHINESE ---
+            zh: {
+                pageTitle: "抓住！蒂尼平性格测试",
+                startTitle: "像我的蒂尼平是哪个？",
+                startDescription: "回答从50个问题中随机出现的10个问题，找出最适合你性格的蒂尼平吧！",
+                startButton: "开始测试！",
+                resultIntro: "紧张刺激...你的灵魂伴侣蒂尼平就是！",
+                resultPersonalityTitle: "你是这样的性格！",
+                retryButton: "重试",
+                shareButton: "分享给朋友",
+                toastMessage: "链接已复制到剪贴板！",
+                questions: [
+                    { question: "朋友看起来难过的时候，我？", answers: [{ text: "紧紧抱住温暖地安慰。", type: "hachuping" }, { text: "询问发生了什么并寻找解决方案。", type: "baroping" }, { text: "用有趣的故事让他们笑。", type: "lalaping" }] },
+                    { question: "面临新挑战时，我的反应是？", answers: [{ text: "喊着'我能行！'勇敢地挑战。", type: "azaping" }, { text: "为了不出错，先仔细制定计划。", type: "kkomkkomping" }, { text: "相信会成功，积极地思考。", type: "chachaping" }] }
+                ],
+                results: {
+                    hachuping: { name: "哈啾平", image: "https://i.namu.wiki/i/VPczNmmnPMnJiDlGCIQnuYb8xcuwqGpxdPS7rLNv9QR_1E6aTE8cpBM_rJ2kT2GdmR7w_l3mq3hlHuOXSHW5ClNBhXoAQyPa1auuz3VAAzWZaS2oOPXhj-zJkcgTUR5PCrfzd_HOTzGdaGE7FEZ1Dw.webp", emoji: "💖", color: "#FF69B4", description: "爱情蒂尼平，哈啾平！你温柔善良，有着关爱周围人的温暖内心。在帮助别人中感受到巨大快乐，是一个充满爱的人。" },
+                    baroping: { name: "巴洛平", image: "https://i.namu.wiki/i/UMM58g85bjvXfRpU9yQwANDZtOw2UZX95rFcQfnGps5GL81z0hE5DqFhZQafqtljmv4Bx1656xJ0wTt0VCWEUAobsaqjL8W7-Sl3olK8CkFc2D03ej_YuxLwfbjrAXUW0xQXHLJV4KNCwXzqP4htCw.webp", emoji: "⚖️", color: "#4169E1", description: "正义蒂尼平，巴洛平！你诚实勤奋，重视规则和正义。以强烈的责任感和领导力给周围人信任的优秀人物。" },
+                    azaping: { name: "阿扎平", image: "https://i.namu.wiki/i/VYmjWN32dpj6M_rUN6Qc8r3hwt2qQmqWOOozpFWqtUK7TJqK32rSm1i0cGxoIAiraXv3H_BTdvRytVaGPxVW59HYOhC15c87p1lOwSkmCpQndk6XngYwLegFAH6duUz7MLiH6y68pzPcE17Y-ZY1Cg.webp", emoji: "🔥", color: "#FFD700", description: "勇气蒂尼平，阿扎平！你充满活力、勇敢，不害怕新的挑战。用热情的能量对周围产生积极影响的冒险精神强的人。" },
+                    chachaping: { name: "恰恰平", image: "https://i.namu.wiki/i/GRkSfBmOji6dN7MWRwDAQQ-mKYarI5A0bw6r1PwbdpC-t-NUJmqedoyjhF4wCvalFEZh5MhjXeLyC3bnIv-1-ajArSGAHzKjmCAKoDSzeAuGW7A81iKFjM9UUAWhqwh5C6UHn91y05nF1pbiXrmjzw.webp", emoji: "🌈", color: "#32CD32", description: "希望蒂尼平，恰恰平！你积极乐观，即使在困难的情况下也不失去希望。鼓励和支持别人，给予希望的人。" },
+                    lalaping: { name: "啦啦平", image: "https://i.namu.wiki/i/h7J75O8PqpRLFPzOuo-teD8u-YDdjsEHxsvC85ZNqwxnsBHS4E58Pc-lQaGyqv_2z1UhJpXlLDBMAhul3s4emXxSx8QAygZHF-NHcpPETva6JZMifz0PQ9pSRbzGnmVx8cEpV2i9IKAFcH9wPlVWIw.webp", emoji: "🎵", color: "#FF6347", description: "快乐蒂尼平，啦啦平！你开朗爱玩，是个愉快的人。热爱歌舞，有让周围气氛愉快的才能。和你在一起总是充满笑声！" },
+                    haeping: { name: "海平", image: "https://i.namu.wiki/i/OQjm8CUMRq_mm1fLfXAeNGrxdDZ3b1_5PHq8rrrUSb0gv9GQ3zV7DZPmKS2l78H_uPeBuCapqT_1z_9HtyiTUocywv6LLVNq0ODugCYyRLDLA3NvT2FxOTrQvmjPs1ZNu2ijO0ew5J5BOQ65C26okQ.webp", emoji: "☀️", color: "#FFA500", description: "幸福蒂尼平，海平！你总是快乐，笑容很多，有从小事中寻找幸福的能力。你明亮的能量也向周围的人传播幸福。" },
+                    mideoping: { name: "信任平", image: "https://i.namu.wiki/i/aOdxsEngYOPOZdYnQWneb5JKUeutA4NPcGTaxNJaUS6rDIcack-4x7re4lIFUieF_JCvbduHG-keqfoFLnSiEu4w8kGwXZvmBzY2ZaYdW5ahRkLYR68avQ2ybupgbuWliwy_eztP74tdCcst5YUVTw.webp", emoji: "🤝", color: "#8A2BE2", description: "信任蒂尼平，信任平！你最重视信任和承诺。认真负责，珍惜一旦结成的缘分，是个可靠值得信赖的人。" },
+                    kkomkkomping: { name: "备忘平", image: "https://i.namu.wiki/i/I0mQ2tYLr8kg9tpl7srGU9GJOiaE09Cex6QU7VMH9q7jepBhrkES1OikfgaiZw5tZ4uPbuTdXIDodqNe6UZldy5ifF9qSp40aE-vdivigTxLFjAzbIUl1sT32VPJafal22LVszdNk4MrRTo4Mk9aVg.webp", emoji: "📋", color: "#20B2AA", description: "记录蒂尼平，备忘平！你擅长整理整顿，喜欢有计划地处理所有事情。追求完美的细致让你很少出错，有能力完美完成任何事情。" }
+                }
+            },
+            // --- INDONESIAN ---
+            id: {
+                pageTitle: "Tangkap! Tes Kepribadian Teenieping",
+                startTitle: "Teenieping mana yang mirip denganku?",
+                startDescription: "Jawab 10 pertanyaan acak dari 50 pertanyaan dan temukan Teenieping yang cocok dengan kepribadianmu!",
+                startButton: "Mulai Tes!",
+                resultIntro: "Deg-degan... Teenieping jodoh jiwamu adalah!",
+                resultPersonalityTitle: "Kamu punya kepribadian seperti ini!",
+                retryButton: "Coba Lagi",
+                shareButton: "Bagikan ke Teman",
+                toastMessage: "Link telah disalin ke clipboard!",
+                questions: [
+                    { question: "Ketika teman terlihat sedih, aku?", answers: [{ text: "Memeluk erat dan menghibur dengan hangat.", type: "hachuping" }, { text: "Bertanya apa yang terjadi dan mencari solusi.", type: "baroping" }, { text: "Menceritakan hal lucu untuk membuatnya tertawa.", type: "lalaping" }] },
+                    { question: "Ketika menghadapi tantangan baru, reaksiku adalah?", answers: [{ text: "Berteriak 'Aku bisa!' dan menghadapinya dengan berani.", type: "azaping" }, { text: "Membuat rencana terlebih dahulu agar tidak salah.", type: "kkomkkomping" }, { text: "Berpikir positif dan percaya akan berhasil.", type: "chachaping" }] }
+                ],
+                results: {
+                    hachuping: { name: "Hachuping", image: "https://i.namu.wiki/i/VPczNmmnPMnJiDlGCIQnuYb8xcuwqGpxdPS7rLNv9QR_1E6aTE8cpBM_rJ2kT2GdmR7w_l3mq3hlHuOXSHW5ClNBhXoAQyPa1auuz3VAAzWZaS2oOPXhj-zJkcgTUR5PCrfzd_HOTzGdaGE7FEZ1Dw.webp", emoji: "💖", color: "#FF69B4", description: "Teenieping Cinta, Hachuping! Kamu penyayang dan baik hati dengan hati yang hangat yang menyayangi orang-orang di sekitar. Kamu merasa senang besar ketika membantu orang lain, orang yang penuh kasih." },
+                    baroping: { name: "Baroping", image: "https://i.namu.wiki/i/UMM58g85bjvXfRpU9yQwANDZtOw2UZX95rFcQfnGps5GL81z0hE5DqFhZQafqtljmv4Bx1656xJ0wTt0VCWEUAobsaqjL8W7-Sl3olK8CkFc2D03ej_YuxLwfbjrAXUW0xQXHLJV4KNCwXzqP4htCw.webp", emoji: "⚖️", color: "#4169E1", description: "Teenieping Kebenaran, Baroping! Kamu jujur dan rajin, menghargai aturan dan keadilan. Orang yang luar biasa yang memberikan kepercayaan kepada orang di sekitar dengan rasa tanggung jawab dan kepemimpinan yang kuat." },
+                    azaping: { name: "Azaping", image: "https://i.namu.wiki/i/VYmjWN32dpj6M_rUN6Qc8r3hwt2qQmqWOOozpFWqtUK7TJqK32rSm1i0cGxoIAiraXv3H_BTdvRytVaGPxVW59HYOhC15c87p1lOwSkmCpQndk6XngYwLegFAH6duUz7MLiH6y68pzPcE17Y-ZY1Cg.webp", emoji: "🔥", color: "#FFD700", description: "Teenieping Keberanian, Azaping! Kamu energik dan berani, tidak takut tantangan baru. Orang yang penuh petualangan yang memberikan pengaruh positif kepada sekitar dengan energi yang penuh semangat." },
+                    chachaping: { name: "Chachaping", image: "https://i.namu.wiki/i/GRkSfBmOji6dN7MWRwDAQQ-mKYarI5A0bw6r1PwbdpC-t-NUJmqedoyjhF4wCvalFEZh5MhjXeLyC3bnIv-1-ajArSGAHzKjmCAKoDSzeAuGW7A81iKFjM9UUAWhqwh5C6UHn91y05nF1pbiXrmjzw.webp", emoji: "🌈", color: "#32CD32", description: "Teenieping Harapan, Chachaping! Dengan kepribadian positif dan optimis, kamu tidak kehilangan harapan bahkan dalam situasi sulit. Orang yang memberikan harapan dengan mendorong dan mendukung orang lain." },
+                    lalaping: { name: "Lalaping", image: "https://i.namu.wiki/i/h7J75O8PqpRLFPzOuo-teD8u-YDdjsEHxsvC85ZNqwxnsBHS4E58Pc-lQaGyqv_2z1UhJpXlLDBMAhul3s4emXxSx8QAygZHF-NHcpPETva6JZMifz0PQ9pSRbzGnmVx8cEpV2i9IKAFcH9wPlVWIw.webp", emoji: "🎵", color: "#FF6347", description: "Teenieping Kegembiraan, Lalaping! Kamu ceria dan nakal, orang yang menyenangkan. Kamu suka menyanyi dan menari dan punya bakat membuat suasana menjadi menyenangkan. Bersama kamu selalu penuh tawa!" },
+                    haeping: { name: "Haeping", image: "https://i.namu.wiki/i/OQjm8CUMRq_mm1fLfXAeNGrxdDZ3b1_5PHq8rrrUSb0gv9GQ3zV7DZPmKS2l78H_uPeBuCapqT_1z_9HtyiTUocywv6LLVNq0ODugCYyRLDLA3NvT2FxOTrQvmjPs1ZNu2ijO0ew5J5BOQ65C26okQ.webp", emoji: "☀️", color: "#FFA500", description: "Teenieping Kebahagiaan, Haeping! Kamu selalu bahagia dan banyak tertawa, punya kemampuan menemukan kebahagiaan dalam hal-hal kecil. Energi cerahmu menyebarkan kebahagiaan kepada orang-orang di sekitar." },
+                    mideoping: { name: "Mideoping", image: "https://i.namu.wiki/i/aOdxsEngYOPOZdYnQWneb5JKUeutA4NPcGTaxNJaUS6rDIcack-4x7re4lIFUieF_JCvbduHG-keqfoFLnSiEu4w8kGwXZvmBzY2ZaYdW5ahRkLYR68avQ2ybupgbuWliwy_eztP74tdCcst5YUVTw.webp", emoji: "🤝", color: "#8A2BE2", description: "Teenieping Kepercayaan, Mideoping! Kamu menganggap kepercayaan dan janji sebagai hal yang paling penting. Orang yang dapat diandalkan dan dipercaya yang serius dan bertanggung jawab, menghargai hubungan yang pernah terjalin." },
+                    kkomkkomping: { name: "Memoping", image: "https://i.namu.wiki/i/I0mQ2tYLr8kg9tpl7srGU9GJOiaE09Cex6QU7VMH9q7jepBhrkES1OikfgaiZw5tZ4uPbuTdXIDodqNe6UZldy5ifF9qSp40aE-vdivigTxLFjAzbIUl1sT32VPJafal22LVszdNk4MrRTo4Mk9aVg.webp", emoji: "📋", color: "#20B2AA", description: "Teenieping Catatan, Memoping! Kamu pandai mengatur dan suka menangani semua hal secara terencana. Dengan kerapian yang mengejar kesempurnaan, kamu jarang melakukan kesalahan dan punya kemampuan menyelesaikan apa pun dengan rapi." }
+                }
+            },
+            // --- FRENCH ---
+            fr: {
+                pageTitle: "Attrapez! Test de Personnalité Teenieping",
+                startTitle: "Quel Teenieping me ressemble?",
+                startDescription: "Répondez à 10 questions aléatoires parmi 50 et trouvez le Teenieping qui correspond parfaitement à votre personnalité!",
+                startButton: "Commencer le Test!",
+                resultIntro: "Suspense... Votre âme sœur Teenieping est!",
+                resultPersonalityTitle: "Voici votre personnalité!",
+                retryButton: "Réessayer",
+                shareButton: "Partager avec des Amis",
+                toastMessage: "Lien copié dans le presse-papiers!",
+                questions: [
+                    { question: "Quand un ami a l'air triste, je?", answers: [{ text: "Le serre fort dans mes bras pour le réconforter chaleureusement.", type: "hachuping" }, { text: "Demande ce qui se passe et cherche une solution.", type: "baroping" }, { text: "Raconte une histoire drôle pour le faire rire.", type: "lalaping" }] },
+                    { question: "Face à un nouveau défi, ma réaction est?", answers: [{ text: "Crie 'Je peux le faire!' et l'affronte courageusement.", type: "azaping" }, { text: "Établis d'abord un plan minutieux pour éviter les erreurs.", type: "kkomkkomping" }, { text: "Pense positivement en croyant que ça va bien se passer.", type: "chachaping" }] }
+                ],
+                results: {
+                    hachuping: { name: "Hachuping", image: "https://i.namu.wiki/i/VPczNmmnPMnJiDlGCIQnuYb8xcuwqGpxdPS7rLNv9QR_1E6aTE8cpBM_rJ2kT2GdmR7w_l3mq3hlHuOXSHW5ClNBhXoAQyPa1auuz3VAAzWZaS2oOPXhj-zJkcgTUR5PCrfzd_HOTzGdaGE7FEZ1Dw.webp", emoji: "💖", color: "#FF69B4", description: "Le Teenieping de l'Amour, Hachuping! Vous êtes affectueux et gentil avec un cœur chaleureux qui chérit les gens autour de vous. Vous trouvez une grande joie à aider les autres, une personne pleine d'amour." },
+                    baroping: { name: "Baroping", image: "https://i.namu.wiki/i/UMM58g85bjvXfRpU9yQwANDZtOw2UZX95rFcQfnGps5GL81z0hE5DqFhZQafqtljmv4Bx1656xJ0wTt0VCWEUAobsaqjL8W7-Sl3olK8CkFc2D03ej_YuxLwfbjrAXUW0xQXHLJV4KNCwXzqP4htCw.webp", emoji: "⚖️", color: "#4169E1", description: "Le Teenieping de la Droiture, Baroping! Vous êtes honnête et diligent, valorisant les règles et la justice. Une personne merveilleuse qui gagne la confiance avec un fort sens des responsabilités et du leadership." },
+                    azaping: { name: "Azaping", image: "https://i.namu.wiki/i/VYmjWN32dpj6M_rUN6Qc8r3hwt2qQmqWOOozpFWqtUK7TJqK32rSm1i0cGxoIAiraXv3H_BTdvRytVaGPxVW59HYOhC15c87p1lOwSkmCpQndk6XngYwLegFAH6duUz7MLiH6y68pzPcE17Y-ZY1Cg.webp", emoji: "🔥", color: "#FFD700", description: "Le Teenieping du Courage, Azaping! Vous êtes énergique et courageux, n'ayant pas peur des nouveaux défis. Une personne aventureuse qui influence positivement les autres avec une énergie passionnée." },
+                    chachaping: { name: "Chachaping", image: "https://i.namu.wiki/i/GRkSfBmOji6dN7MWRwDAQQ-mKYarI5A0bw6r1PwbdpC-t-NUJmqedoyjhF4wCvalFEZh5MhjXeLyC3bnIv-1-ajArSGAHzKjmCAKoDSzeAuGW7A81iKFjM9UUAWhqwh5C6UHn91y05nF1pbiXrmjzw.webp", emoji: "🌈", color: "#32CD32", description: "Le Teenieping de l'Espoir, Chachaping! Avec votre personnalité positive et optimiste, vous ne perdez pas espoir même dans les situations difficiles. Une personne qui donne de l'espoir en encourageant et soutenant les autres." },
+                    lalaping: { name: "Lalaping", image: "https://i.namu.wiki/i/h7J75O8PqpRLFPzOuo-teD8u-YDdjsEHxsvC85ZNqwxnsBHS4E58Pc-lQaGyqv_2z1UhJpXlLDBMAhul3s4emXxSx8QAygZHF-NHcpPETva6JZMifz0PQ9pSRbzGnmVx8cEpV2i9IKAFcH9wPlVWIw.webp", emoji: "🎵", color: "#FF6347", description: "Le Teenieping de la Joie, Lalaping! Vous êtes joyeux et espiègle, une personne amusante. Vous aimez chanter et danser et avez le talent de rendre l'atmosphère joyeuse. Être avec vous est toujours plein de rires!" },
+                    haeping: { name: "Haeping", image: "https://i.namu.wiki/i/OQjm8CUMRq_mm1fLfXAeNGrxdDZ3b1_5PHq8rrrUSb0gv9GQ3zV7DZPmKS2l78H_uPeBuCapqT_1z_9HtyiTUocywv6LLVNq0ODugCYyRLDLA3NvT2FxOTrQvmjPs1ZNu2ijO0ew5J5BOQ65C26okQ.webp", emoji: "☀️", color: "#FFA500", description: "Le Teenieping du Bonheur, Haeping! Vous êtes toujours heureux et riez beaucoup, ayant la capacité de trouver le bonheur dans les petites choses. Votre énergie lumineuse répand aussi le bonheur aux gens autour de vous." },
+                    mideoping: { name: "Mideoping", image: "https://i.namu.wiki/i/aOdxsEngYOPOZdYnQWneb5JKUeutA4NPcGTaxNJaUS6rDIcack-4x7re4lIFUieF_JCvbduHG-keqfoFLnSiEu4w8kGwXZvmBzY2ZaYdW5ahRkLYR68avQ2ybupgbuWliwy_eztP74tdCcst5YUVTw.webp", emoji: "🤝", color: "#8A2BE2", description: "Le Teenieping de la Confiance, Mideoping! Vous considérez la confiance et les promesses comme les plus importantes. Une personne fiable et digne de confiance qui est sérieuse et responsable, chérissant les relations une fois formées." },
+                    kkomkkomping: { name: "Memoping", image: "https://i.namu.wiki/i/I0mQ2tYLr8kg9tpl7srGU9GJOiaE09Cex6QU7VMH9q7jepBhrkES1OikfgaiZw5tZ4uPbuTdXIDodqNe6UZldy5ifF9qSp40aE-vdivigTxLFjAzbIUl1sT32VPJafal22LVszdNk4MrRTo4Mk9aVg.webp", emoji: "📋", color: "#20B2AA", description: "Le Teenieping des Notes, Memoping! Vous êtes bon en organisation et aimez gérer tout de manière planifiée. Avec votre méticulosité qui cherche la perfection, vous faites peu d'erreurs et avez la capacité de finir n'importe quoi proprement." }
                 }
             },
             // --- ENGLISH ---
@@ -207,18 +331,17 @@
                     { question: "What is 'happiness' to you?", answers: [{ text: "Being able to be grateful and smile at small things.", type: "haeping" }, { text: "The process of moving vigorously towards a goal.", type: "azaping" }, { text: "Every moment spent with loved ones.", type: "hachuping" }] },
                     { question: "Your thoughts on organizing?", answers: [{ text: "I feel at ease when everything is perfectly in its place.", type: "kkomkkomping" }, { text: "It's important, but it's okay to be messy sometimes.", type: "lalaping" }, { text: "I only do it when necessary.", type: "azaping" }] },
                     { question: "What's the best compliment you'd like to hear?", answers: [{ text: "'You are so reliable.'", type: "mideoping" }, { text: "'Being with you makes me happy.'", type: "haeping" }, { text: "'You are so righteous.'", type: "baroping" }] },
-                    { question: "When you face a difficult situation?", answers: [{ text: "I try to think positively without losing hope.", type: "chachaping" }, { text: "I face it bravely without giving up.", type: "azaping" }, { text: "I ask a trustworthy friend for advice.", type: "mideoping" }] },
-                    // ... (To save space, only the first 10 questions are translated. The logic will work for all 50 if translated.)
+                    { question: "When you face a difficult situation?", answers: [{ text: "I try to think positively without losing hope.", type: "chachaping" }, { text: "I face it bravely without giving up.", type: "azaping" }, { text: "I ask a trustworthy friend for advice.", type: "mideoping" }] }
                 ],
                 results: {
-                    hachuping: { name: "Hachuping", image: "https://i.ibb.co/3W6q0yg/hachuping.webp", description: "The Teenieping of Love, Hachuping! You are affectionate, kind, and have a warm heart that cares for those around you. You find great joy in helping others, a person full of love." },
-                    baroping: { name: "Baroping", image: "https://i.ibb.co/D9yP0dG/baroping.webp", description: "The Teenieping of Righteousness, Baroping! You are honest, diligent, and value rules and justice. You are a wonderful person who gains trust with a strong sense of responsibility and leadership." },
-                    azaping: { name: "Azaping", image: "https://i.ibb.co/xGL10mJ/azaping.webp", description: "The Teenieping of Courage, Azaping! You are energetic, brave, and not afraid of new challenges. You are an adventurous person who positively influences others with your passionate energy." },
-                    chachaping: { name: "Chachaping", image: "https://i.ibb.co/M843W6V/chachaping.webp", description: "The Teenieping of Hope, Chachaping! With your positive and optimistic personality, you don't lose hope even in difficult situations. You are a person who gives hope by encouraging and cheering for others." },
-                    lalaping: { name: "Lalaping", image: "https://i.ibb.co/T0M5BFN/lalaping.webp", description: "The Teenieping of Joy, Lalaping! You are a cheerful and playful person. You love singing and dancing and have a talent for making the atmosphere fun. Being with you is always full of laughter!" },
-                    haeping: { name: "Haeping", image: "https://i.ibb.co/FJhR93L/haeping.webp", description: "The Teenieping of Happiness, Haeping! You are always happy, laugh a lot, and have the ability to find happiness in small things. Your bright energy spreads happiness to those around you." },
-                    mideoping: { name: "Mideoping", image: "https://i.ibb.co/6yV0hCf/mideoping.webp", description: "The Teenieping of Trust, Mideoping! You value trust and promises the most. You are a dependable and trustworthy person who cherishes relationships once they are formed, with a serious and strong sense of responsibility." },
-                    kkomkkomping: { name: "Kkomkkomping", image: "https://i.ibb.co/N1jY3Kz/kkomkkomping.webp", description: "The Teenieping of Meticulousness, Kkomkkomping! You are good at organizing and like to handle everything in a planned manner. With your perfection-seeking meticulousness, you make few mistakes and have the ability to finish any task neatly." }
+                    hachuping: { name: "Hachuping", image: "https://i.namu.wiki/i/VPczNmmnPMnJiDlGCIQnuYb8xcuwqGpxdPS7rLNv9QR_1E6aTE8cpBM_rJ2kT2GdmR7w_l3mq3hlHuOXSHW5ClNBhXoAQyPa1auuz3VAAzWZaS2oOPXhj-zJkcgTUR5PCrfzd_HOTzGdaGE7FEZ1Dw.webp", emoji: "💖", color: "#FF69B4", description: "The Teenieping of Love, Hachuping! You are affectionate, kind, and have a warm heart that cares for those around you. You find great joy in helping others, a person full of love." },
+                    baroping: { name: "Baroping", image: "https://i.namu.wiki/i/UMM58g85bjvXfRpU9yQwANDZtOw2UZX95rFcQfnGps5GL81z0hE5DqFhZQafqtljmv4Bx1656xJ0wTt0VCWEUAobsaqjL8W7-Sl3olK8CkFc2D03ej_YuxLwfbjrAXUW0xQXHLJV4KNCwXzqP4htCw.webp", emoji: "⚖️", color: "#4169E1", description: "The Teenieping of Righteousness, Baroping! You are honest, diligent, and value rules and justice. You are a wonderful person who gains trust with a strong sense of responsibility and leadership." },
+                    azaping: { name: "Azaping", image: "https://i.namu.wiki/i/VYmjWN32dpj6M_rUN6Qc8r3hwt2qQmqWOOozpFWqtUK7TJqK32rSm1i0cGxoIAiraXv3H_BTdvRytVaGPxVW59HYOhC15c87p1lOwSkmCpQndk6XngYwLegFAH6duUz7MLiH6y68pzPcE17Y-ZY1Cg.webp", emoji: "🔥", color: "#FFD700", description: "The Teenieping of Courage, Azaping! You are energetic, brave, and not afraid of new challenges. You are an adventurous person who positively influences others with your passionate energy." },
+                    chachaping: { name: "Chachaping", image: "https://i.namu.wiki/i/GRkSfBmOji6dN7MWRwDAQQ-mKYarI5A0bw6r1PwbdpC-t-NUJmqedoyjhF4wCvalFEZh5MhjXeLyC3bnIv-1-ajArSGAHzKjmCAKoDSzeAuGW7A81iKFjM9UUAWhqwh5C6UHn91y05nF1pbiXrmjzw.webp", emoji: "🌈", color: "#32CD32", description: "The Teenieping of Hope, Chachaping! With your positive and optimistic personality, you don't lose hope even in difficult situations. You are a person who gives hope by encouraging and cheering for others." },
+                    lalaping: { name: "Lalaping", image: "https://i.namu.wiki/i/h7J75O8PqpRLFPzOuo-teD8u-YDdjsEHxsvC85ZNqwxnsBHS4E58Pc-lQaGyqv_2z1UhJpXlLDBMAhul3s4emXxSx8QAygZHF-NHcpPETva6JZMifz0PQ9pSRbzGnmVx8cEpV2i9IKAFcH9wPlVWIw.webp", emoji: "🎵", color: "#FF6347", description: "The Teenieping of Joy, Lalaping! You are a cheerful and playful person. You love singing and dancing and have a talent for making the atmosphere fun. Being with you is always full of laughter!" },
+                    haeping: { name: "Haeping", image: "https://i.namu.wiki/i/OQjm8CUMRq_mm1fLfXAeNGrxdDZ3b1_5PHq8rrrUSb0gv9GQ3zV7DZPmKS2l78H_uPeBuCapqT_1z_9HtyiTUocywv6LLVNq0ODugCYyRLDLA3NvT2FxOTrQvmjPs1ZNu2ijO0ew5J5BOQ65C26okQ.webp", emoji: "☀️", color: "#FFA500", description: "The Teenieping of Happiness, Haeping! You are always happy, laugh a lot, and have the ability to find happiness in small things. Your bright energy spreads happiness to those around you." },
+                    mideoping: { name: "Mideoping", image: "https://i.namu.wiki/i/aOdxsEngYOPOZdYnQWneb5JKUeutA4NPcGTaxNJaUS6rDIcack-4x7re4lIFUieF_JCvbduHG-keqfoFLnSiEu4w8kGwXZvmBzY2ZaYdW5ahRkLYR68avQ2ybupgbuWliwy_eztP74tdCcst5YUVTw.webp", emoji: "🤝", color: "#8A2BE2", description: "The Teenieping of Trust, Mideoping! You value trust and promises the most. You are a dependable and trustworthy person who cherishes relationships once they are formed, with a serious and strong sense of responsibility." },
+                    kkomkkomping: { name: "Memoping", image: "https://i.namu.wiki/i/I0mQ2tYLr8kg9tpl7srGU9GJOiaE09Cex6QU7VMH9q7jepBhrkES1OikfgaiZw5tZ4uPbuTdXIDodqNe6UZldy5ifF9qSp40aE-vdivigTxLFjAzbIUl1sT32VPJafal22LVszdNk4MrRTo4Mk9aVg.webp", emoji: "📋", color: "#20B2AA", description: "The Teenieping of Records, Memoping! You are good at organizing and like to handle everything in a planned manner. With your perfection-seeking meticulousness, you make few mistakes and have the ability to finish any task neatly." }
                 }
             }
         };
@@ -272,6 +395,11 @@
             toastMessage.textContent = t.toastMessage;
 
             document.documentElement.lang = lang;
+            
+            // If we're currently showing results, update the result display too
+            if (!resultScreen.classList.contains('hidden')) {
+                showResult();
+            }
         }
 
         // Function to start the quiz
@@ -352,12 +480,55 @@
             }
 
             const result = translations[currentLanguage].results[resultType];
+            const t = translations[currentLanguage];
 
             resultName.textContent = result.name;
-            resultImage.src = result.image;
-            resultImage.alt = result.name;
-            resultImage.onerror = () => { resultImage.src = 'https://placehold.co/200x200/CCCCCC/FFFFFF?text=Image+Error'; };
+            resultPersonalityTitle.textContent = t.resultPersonalityTitle;
             resultDescription.textContent = result.description;
+            
+            // Remove any existing emoji display
+            const existingEmoji = document.getElementById('result-emoji');
+            if (existingEmoji) existingEmoji.remove();
+            
+            // Check if this character has a real image
+            if (result.image) {
+                // Use real image for all characters that have image URLs
+                resultImage.style.display = 'block';
+                resultImage.src = result.image;
+                resultImage.alt = result.name;
+                resultImage.onerror = () => {
+                    // Fallback to emoji if image fails
+                    resultImage.style.display = 'none';
+                    createEmojiDisplay();
+                };
+            } else {
+                // Use emoji-based display for characters without images
+                resultImage.style.display = 'none';
+                createEmojiDisplay();
+            }
+            
+            function createEmojiDisplay() {
+                // Create new emoji display
+                const emojiDiv = document.createElement('div');
+                emojiDiv.id = 'result-emoji';
+                emojiDiv.style.cssText = `
+                    width: 200px;
+                    height: 200px;
+                    margin: 16px auto;
+                    background-color: ${result.color};
+                    border-radius: 50%;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    font-size: 80px;
+                    border: 4px solid #8B5CF6;
+                    box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+                `;
+                emojiDiv.textContent = result.emoji;
+                
+                // Insert the emoji after the result name
+                resultImage.parentNode.insertBefore(emojiDiv, resultImage);
+            }
         }
 
         // Function for sharing the result
