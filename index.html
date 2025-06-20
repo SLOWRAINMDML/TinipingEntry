@@ -23,6 +23,18 @@
         body {
             font-family: 'Jua', sans-serif;
         }
+        
+        /* 이미지 선명도 개선 */
+        img {
+            image-rendering: -webkit-optimize-contrast;
+            image-rendering: crisp-edges;
+            image-rendering: pixelated;
+            -webkit-backface-visibility: hidden;
+            -webkit-transform: translateZ(0);
+            backface-visibility: hidden;
+            transform: translateZ(0);
+        }
+        
         /* Animation Effects */
         .fade-in {
             animation: fadeIn 0.5s ease-in-out;
@@ -61,7 +73,7 @@
         
         <!-- Start Screen -->
         <div id="start-screen" class="text-center fade-in">
-            <img src="https://i.namu.wiki/i/qNcYmrLy4EuXaWGixqCZFAthTcPLQWWY0ltN7PYMgxCAwXEH8xP3qmp73QnNqj9FWn_AQNwSyYERCtLA32sDh9uGoSCZIguIR5k0O-pgNZGD6FqWLBlOs5J-EmvowVP1CmyVfKRnXg4bgo-h7AKWig.webp" alt="Teenieping Logo" class="mx-auto rounded-full w-32 h-32 mb-4 border-4 border-pink-200">
+            <img src="https://i.namu.wiki/i/cdTPzCD12BGElKeTngOqowfRAoF8pfpMGUSElhx6DDE1HQstA2oLdHXxe5w_CLkHyC3P94PjRiJElqA4f8AyC0F3FU7D_X_rlPjWC2kM7bZeoLtS8JjbvaEHpegxxgX7rtLOuuav6nVLh1CZbSw8DA.webp" alt="Teenieping Logo" class="mx-auto rounded-full w-32 h-32 mb-4 border-4 border-pink-200">
             <h1 id="start-title" class="text-3xl font-bold text-pink-500 mb-2"></h1>
             <p id="start-description" class="text-gray-600 mb-6"></p>
             <button id="start-btn" class="w-full bg-pink-500 hover:bg-pink-600 text-white font-bold py-3 px-4 rounded-lg text-xl transition duration-300 transform hover:scale-105"></button>
@@ -82,11 +94,15 @@
 
         <!-- Result Screen -->
         <div id="result-screen" class="hidden text-center fade-in">
-            <p id="result-intro" class="text-gray-600 font-bold"></p>
-            <h2 id="result-name" class="text-4xl font-extrabold text-violet-600 my-3"></h2>
-            <img id="result-image" src="" alt="Result Image" class="mx-auto rounded-2xl w-48 h-48 my-4 border-4 border-violet-300 shadow-lg object-cover">
-            <h3 id="result-personality-title" class="text-xl font-bold text-gray-800 mb-2"></h3>
-            <p id="result-description" class="bg-violet-50 rounded-lg p-4 text-gray-700 mb-6"></p>
+            <div id="capture" class="bg-white rounded-2xl p-6 shadow-xl">
+                <p id="result-intro" class="text-gray-600 font-bold"></p>
+                <h2 id="result-name" class="text-4xl font-extrabold text-violet-600 my-3"></h2>
+                <img id="result-image" src="" alt="Result Image" class="mx-auto rounded-2xl w-48 h-48 my-4 border-4 border-violet-300 shadow-lg object-cover">
+                <h3 id="result-personality-title" class="text-xl font-bold text-gray-800 mb-2"></h3>
+                <p id="result-description" class="bg-violet-50 rounded-lg p-4 text-gray-700 mb-6"></p>
+            </div>
+
+            <p style="padding-bottom: 10px;"></p>
             
             <div class="grid grid-cols-2 gap-4">
                 <button id="retry-btn" class="w-full bg-violet-500 hover:bg-violet-600 text-white font-bold py-3 px-4 rounded-lg text-lg transition duration-300 transform hover:scale-105"></button>
@@ -143,6 +159,7 @@
                 retryButton: "다시 해보기",
                 shareButton: "친구에게 공유",
                 toastMessage: "클립보드에 링크가 복사되었어요!",
+                toastImageMessage: "클립보드에 결과 이미지가 복사되었어요!",
                 questions: [
                     { question: "친구가 슬퍼 보일 때, 나는?", answers: [{ text: "꼬옥 안아주며 따뜻하게 위로한다.", type: "hachuping" }, { text: "무슨 일인지 묻고 해결책을 찾아본다.", type: "baroping" }, { text: "재밌는 이야기로 웃게 만들어 준다.", type: "lalaping" }] },
                     { question: "새로운 도전 과제가 주어졌을 때, 나의 반응은?", answers: [{ text: "'할 수 있어!'라고 외치며 용감하게 도전한다.", type: "azaping" }, { text: "실수하지 않도록 꼼꼼하게 계획부터 세운다.", type: "kkomkkomping" }, { text: "잘 될 거라고 믿으며 긍정적으로 생각한다.", type: "chachaping" }] },
@@ -217,6 +234,7 @@
                 retryButton: "もう一度",
                 shareButton: "友達にシェア",
                 toastMessage: "リンクがクリップボードにコピーされました！",
+                toastImageMessage: "結果画像がクリップボードにコピーされました！",
                 questions: [
                     { question: "友達が悲しそうに見える時、私は？", answers: [{ text: "ぎゅっと抱きしめて温かく慰める。", type: "hachuping" }, { text: "何があったか聞いて解決策を探してみる。", type: "baroping" }, { text: "楽しい話で笑わせてあげる。", type: "lalaping" }] },
                     { question: "新しい挑戦課題が与えられた時、私の反応は？", answers: [{ text: "「できる！」と叫んで勇敢に挑戦する。", type: "azaping" }, { text: "失敗しないよう念入りに計画から立てる。", type: "kkomkkomping" }, { text: "うまくいくと信じて前向きに考える。", type: "chachaping" }] }
@@ -243,6 +261,7 @@
                 retryButton: "重试",
                 shareButton: "分享给朋友",
                 toastMessage: "链接已复制到剪贴板！",
+                toastImageMessage: "结果图片已复制到剪贴板！",
                 questions: [
                     { question: "朋友看起来难过的时候，我？", answers: [{ text: "紧紧抱住温暖地安慰。", type: "hachuping" }, { text: "询问发生了什么并寻找解决方案。", type: "baroping" }, { text: "用有趣的故事让他们笑。", type: "lalaping" }] },
                     { question: "面临新挑战时，我的反应是？", answers: [{ text: "喊着'我能行！'勇敢地挑战。", type: "azaping" }, { text: "为了不出错，先仔细制定计划。", type: "kkomkkomping" }, { text: "相信会成功，积极地思考。", type: "chachaping" }] }
@@ -269,6 +288,7 @@
                 retryButton: "Coba Lagi",
                 shareButton: "Bagikan ke Teman",
                 toastMessage: "Link telah disalin ke clipboard!",
+                toastImageMessage: "Gambar hasil telah disalin ke clipboard!",
                 questions: [
                     { question: "Ketika teman terlihat sedih, aku?", answers: [{ text: "Memeluk erat dan menghibur dengan hangat.", type: "hachuping" }, { text: "Bertanya apa yang terjadi dan mencari solusi.", type: "baroping" }, { text: "Menceritakan hal lucu untuk membuatnya tertawa.", type: "lalaping" }] },
                     { question: "Ketika menghadapi tantangan baru, reaksiku adalah?", answers: [{ text: "Berteriak 'Aku bisa!' dan menghadapinya dengan berani.", type: "azaping" }, { text: "Membuat rencana terlebih dahulu agar tidak salah.", type: "kkomkkomping" }, { text: "Berpikir positif dan percaya akan berhasil.", type: "chachaping" }] }
@@ -295,6 +315,7 @@
                 retryButton: "Réessayer",
                 shareButton: "Partager avec des Amis",
                 toastMessage: "Lien copié dans le presse-papiers!",
+                toastImageMessage: "Image du résultat copiée dans le presse-papiers!",
                 questions: [
                     { question: "Quand un ami a l'air triste, je?", answers: [{ text: "Le serre fort dans mes bras pour le réconforter chaleureusement.", type: "hachuping" }, { text: "Demande ce qui se passe et cherche une solution.", type: "baroping" }, { text: "Raconte une histoire drôle pour le faire rire.", type: "lalaping" }] },
                     { question: "Face à un nouveau défi, ma réaction est?", answers: [{ text: "Crie 'Je peux le faire!' et l'affronte courageusement.", type: "azaping" }, { text: "Établis d'abord un plan minutieux pour éviter les erreurs.", type: "kkomkkomping" }, { text: "Pense positivement en croyant que ça va bien se passer.", type: "chachaping" }] }
@@ -321,6 +342,7 @@
                 retryButton: "Try Again",
                 shareButton: "Share with Friends",
                 toastMessage: "Link copied to clipboard!",
+                toastImageMessage: "Result image copied to clipboard!",
                 questions: [
                     { question: "When a friend looks sad, what do you do?", answers: [{ text: "Give them a warm hug to comfort them.", type: "hachuping" }, { text: "Ask what's wrong and try to find a solution.", type: "baroping" }, { text: "Tell a funny story to make them laugh.", type: "lalaping" }] },
                     { question: "When faced with a new challenge, how do you react?", answers: [{ text: "Shout 'I can do it!' and bravely take it on.", type: "azaping" }, { text: "Make a detailed plan first to avoid mistakes.", type: "kkomkkomping" }, { text: "Think positively, believing it will turn out well.", type: "chachaping" }] },
@@ -532,8 +554,39 @@
         }
 
         // Function for sharing the result
-        function shareResult() {
+        async function shareResult() {
+            try {
+                // HTML을 이미지로 변환하기 위해 스크립트 로드
+                if (typeof html2canvas === 'undefined') {
+                    const script = document.createElement('script');
+                    script.src = 'https://html2canvas.hertzen.com/dist/html2canvas.min.js';
+                    document.head.appendChild(script);
+                    await new Promise(resolve => script.onload = resolve);
+                }
+
+                // 이모지만 캡처 (이미지 없이)
+                html2canvas(document.querySelector("#capture")).then(canvas => {
+                    canvas.toBlob(blob => {
+                        navigator.clipboard.write([new ClipboardItem({'image/png': blob})]).then(() => {
+                            toastMessage.textContent = translations[currentLanguage].toastImageMessage;
+                            toastMessage.classList.remove('hidden');
+                            toastMessage.classList.add('toast');
+                            setTimeout(() => {
+                                toastMessage.classList.add('hidden');
+                                toastMessage.classList.remove('toast');
+                            }, 3000);
+                        }).catch(() => fallbackShareText());
+                    });
+                });
+            } catch (err) {
+                fallbackShareText();
+            }
+        }
+
+        // 폴백: URL만 복사하는 함수
+        function fallbackShareText() {
             navigator.clipboard.writeText(window.location.href).then(() => {
+                toastMessage.textContent = translations[currentLanguage].toastMessage;
                 toastMessage.classList.remove('hidden');
                 toastMessage.classList.add('toast');
                 setTimeout(() => {
