@@ -3,21 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <!-- SEO Meta Tags -->
-    <title>나와 닮은 티니핑 찾기 | 캐치! 티니핑 성격 테스트</title>
-    <meta name="description" content="티니핑과 나는 얼마나 닮았을까? 간단한 심리테스트로 나와 꼭 맞는 성격의 티니핑을 찾아보세요!">
-    <meta name="keywords" content="티니핑, 성격테스트, 심리테스트, 캐치티니핑, 나와 닮은 캐릭터, MBTI, 유아 성격테스트">
-
-    <!-- Open Graph Tags -->
-    <meta property="og:title" content="나와 닮은 티니핑 찾기 | 캐치! 티니핑 성격 테스트">
-    <meta property="og:description" content="간단한 테스트로 나와 닮은 티니핑을 찾아보세요! 아이들과 함께 즐길 수 있는 귀여운 캐릭터 성격 테스트.">
-    <meta property="og:image" content="https://yourdomain.com/images/thumbnail.png">
-    <meta property="og:url" content="https://yourusername.github.io/tinyping-test">
-
-    <!-- Twitter Card -->
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="나와 닮은 티니핑 찾기">
-    <meta name="twitter:description" content="티니핑 성격테스트로 나와 닮은 캐릭터를 찾아보세요!">    <script src="https://cdn.tailwindcss.com"></script>
+    <title id="page-title">캐치! 티니핑 성격 테스트</title>
+    <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Jua&display=swap" rel="stylesheet">
@@ -129,7 +116,7 @@
             ko: {
                 pageTitle: "캐치! 티니핑 성격 테스트",
                 startTitle: "나와 닮은 티니핑은?",
-                startDescription: "10개의 질문에 답하고 나와 꼭 맞는 성격의 티니핑을 찾아보세요!",
+                startDescription: "50개의 질문 중 랜덤으로 나오는 10개의 질문에 답하고 나와 꼭 맞는 성격의 티니핑을 찾아보세요!",
                 startButton: "테스트 시작하기!",
                 resultIntro: "두구두구... 당신의 소울메이트 티니핑은 바로!",
                 resultPersonalityTitle: "이런 성격이시군요!",
@@ -163,7 +150,7 @@
                     { question: "억울한 오해를 받았다. 나는?", answers: [{ text: "사실이 아니라고 차분하게, 논리적으로 설명한다.", type: "baroping" }, { text: "언젠가는 진실이 밝혀질 거라고 믿는다.", type: "mideoping" }, { text: "너무 속상해서 친구에게 털어놓으며 위로받는다.", type: "hachuping" }] },
                     { question: "내가 생각하는 '용기'란?", answers: [{ text: "실패를 두려워하지 않고 일단 해보는 것", type: "azaping" }, { text: "부당한 일에 '아니오'라고 말하는 것", type: "baroping" }, { text: "소중한 사람을 지키기 위해 나서는 것", type: "mideoping" }] },
                     { question: "다른 사람과 대화할 때 나는 주로?", answers: [{ text: "이야기를 주도하며 분위기를 이끈다.", type: "lalaping" }, { text: "상대방의 이야기에 귀 기울이며 공감한다.", type: "hachuping" }, { text: "필요한 정보를 정확하게 전달하려고 노력한다.", type: "baroping" }] },
-                    { question: "나만의 스트레스 해소법이 있다면?", answers: [{ text: "햇살 좋은 날 공원을 산책하며 기분 전환한다.", type: "haeping" }, { text: "그동안 미뤄왔던 일들을 하나씩 처리하며 성취감을 느낀다.", type:: "kkomkkomping" }, { text: "아무것도 하지 않고 멍하니 있는다.", type: "haeping" }] },
+                    { question: "나만의 스트레스 해소법이 있다면?", answers: [{ text: "햇살 좋은 날 공원을 산책하며 기분 전환한다.", type: "haeping" }, { text: "그동안 미뤄왔던 일들을 하나씩 처리하며 성취감을 느낀다.", type: "kkomkkomping" }, { text: "아무것도 하지 않고 멍하니 있는다.", type: "haeping" }] },
                     { question: "새로운 사람을 만났을 때 나는?", answers: [{ text: "먼저 다가가 말을 걸며 금방 친해진다.", type: "azaping" }, { text: "상대방이 먼저 말을 걸어주길 기다린다.", type: "mideoping" }, { text: "밝게 웃으며 좋은 인상을 주려고 노력한다.", type: "chachaping" }] },
                     { question: "나를 움직이게 하는 가장 큰 원동력은?", answers: [{ text: "새로운 것에 대한 호기심과 즐거움", type: "lalaping" }, { text: "내가 정한 목표와 계획", type: "kkomkkomping" }, { text: "더 나은 미래가 올 것이라는 희망", type: "chachaping" }] },
                     { question: "선물을 할 때, 나는?", answers: [{ text: "상대방이 평소에 필요하다고 말했던 것을 기억해뒀다 선물한다.", type: "hachuping" }, { text: "실용적이고 오래 쓸 수 있는 물건을 고른다.", type: "baroping" }, { text: "깜짝 놀라게 해줄 서프라이즈 선물을 준비한다.", type: "lalaping" }] },
