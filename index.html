@@ -188,7 +188,7 @@
                 resultIntro: "두구두구... 당신의 소울메이트 티니핑은 바로!",
                 resultPersonalityTitle: "이런 성격이시군요!",
                 retryButton: "다시 해보기",
-                shareButton: "친구에게 공유",
+                shareButton: "이미지 저장",
                 toastMessage: "클립보드에 링크가 복사되었어요!",
                 toastImageMessage: "클립보드에 결과 이미지가 복사되었어요!",
                 downloadMessage: "이미지가 다운로드되었어요!",
@@ -264,7 +264,7 @@
                 resultIntro: "どきどき...あなたのソウルメイト・ティニーピングは！",
                 resultPersonalityTitle: "こんな性格ですね！",
                 retryButton: "もう一度",
-                shareButton: "友達にシェア",
+                shareButton: "画像保存",
                 toastMessage: "リンクがクリップボードにコピーされました！",
                 toastImageMessage: "結果画像がクリップボードにコピーされました！",
                 downloadMessage: "画像がダウンロードされました！",
@@ -332,7 +332,7 @@
                 resultIntro: "紧张刺激...你的灵魂伴侣蒂尼平就是！",
                 resultPersonalityTitle: "你是这样的性格！",
                 retryButton: "重试",
-                shareButton: "分享给朋友",
+                shareButton: "保存图片",
                 toastMessage: "链接已复制到剪贴板！",
                 toastImageMessage: "结果图片已复制到剪贴板！",
                 downloadMessage: "图片已下载！",
@@ -368,7 +368,7 @@
                 resultIntro: "Deg-degan... Teenieping jodoh jiwamu adalah!",
                 resultPersonalityTitle: "Kamu punya kepribadian seperti ini!",
                 retryButton: "Coba Lagi",
-                shareButton: "Bagikan ke Teman",
+                shareButton: "Simpan Gambar",
                 toastMessage: "Link telah disalin ke clipboard!",
                 toastImageMessage: "Gambar hasil telah disalin ke clipboard!",
                 downloadMessage: "Gambar telah diunduh!",
@@ -396,7 +396,7 @@
                 resultIntro: "Suspense... Votre âme sœur Teenieping est!",
                 resultPersonalityTitle: "Voici votre personnalité!",
                 retryButton: "Réessayer",
-                shareButton: "Partager avec des Amis",
+                shareButton: "Sauvegarder Image",
                 toastMessage: "Lien copié dans le presse-papiers!",
                 toastImageMessage: "Image du résultat copiée dans le presse-papiers!",
                 downloadMessage: "Image téléchargée!",
@@ -424,7 +424,7 @@
                 resultIntro: "Drumroll... Your soulmate Teenieping is!",
                 resultPersonalityTitle: "This is your personality!",
                 retryButton: "Try Again",
-                shareButton: "Share with Friends",
+                shareButton: "Save Image",
                 toastMessage: "Link copied to clipboard!",
                 toastImageMessage: "Result image copied to clipboard!",
                 downloadMessage: "Image downloaded!",
@@ -642,59 +642,20 @@
             }
         }
 
-        // Function for sharing the result
+        // Function for sharing the result (이미지 다운로드만)
         async function shareResult() {
-            console.log('공유하기 버튼 클릭됨'); // 디버깅용 로그
+            console.log('공유하기 버튼 클릭됨 - 이미지 다운로드 시작'); // 디버깅용 로그
             
             try {
-                // Get current result data
-                let resultType = 'hachuping';
-                let maxScore = -1;
-
-                for(const type in scores) {
-                    if (scores[type] > maxScore) {
-                        maxScore = scores[type];
-                        resultType = type;
-                    }
-                }
-
-                const topTypes = Object.keys(scores).filter(type => scores[type] === maxScore);
-                if (topTypes.length > 1) {
-                    resultType = topTypes[Math.floor(Math.random() * topTypes.length)];
-                }
-
-                const result = translations[currentLanguage].results[resultType];
-                const t = translations[currentLanguage];
-                
-                // Create text for clipboard
-                const shareText = `${t.pageTitle}\n\n${t.resultIntro}\n${result.name}\n\n${t.resultPersonalityTitle}\n${result.description}\n\n${window.location.href}`;
-                
-                // Copy text to clipboard first
-                console.log('텍스트 복사 시도 중...');
-                await navigator.clipboard.writeText(shareText);
-                console.log('텍스트 복사 성공');
-                
-                // Try to download image (but don't let it fail the whole process)
-                let imageDownloaded = false;
-                try {
-                    console.log('이미지 다운로드 시도 중...');
-                    await downloadResultImage();
-                    imageDownloaded = true;
-                    console.log('이미지 다운로드 성공');
-                } catch (imageErr) {
-                    console.error('이미지 다운로드 실패:', imageErr);
-                }
-                
-                // Show appropriate toast message
-                if (imageDownloaded) {
-                    showToast(translations[currentLanguage].toastMessage + " " + translations[currentLanguage].downloadMessage);
-                } else {
-                    showToast(translations[currentLanguage].toastMessage);
-                }
+                console.log('이미지 다운로드 시도 중...');
+                await downloadResultImage();
+                console.log('이미지 다운로드 성공');
+                showToast(translations[currentLanguage].downloadMessage);
 
             } catch (err) {
-                console.error('공유 실패:', err);
-                fallbackShareText();
+                console.error('이미지 다운로드 실패:', err);
+                // 이미지 다운로드에 실패한 경우 대체 메시지 표시
+                showToast('이미지 다운로드에 실패했습니다. 다시 시도해주세요.');
             }
         }
 
